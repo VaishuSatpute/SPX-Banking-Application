@@ -1,0 +1,142 @@
+CREATE DATABASE IF NOT EXISTS spxbank;
+USE spxbank;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(100) UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  account_number VARCHAR(20) NOT NULL UNIQUE,
+  mid_number VARCHAR(20) UNIQUE,
+  balance DECIMAL(15,2) NOT NULL DEFAULT 0.00,
+  account_status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  type VARCHAR(20) NOT NULL,
+  amount DECIMAL(15,2) NOT NULL,
+  counterparty_account VARCHAR(20) NOT NULL,
+  balance_after DECIMAL(15,2) NOT NULL,
+  reference_id VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_transactions_user_created (user_id, created_at),
+  CONSTRAINT fk_transactions_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS loans (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  loan_type VARCHAR(50) NOT NULL,
+  amount DECIMAL(15,2) NOT NULL,
+  interest_rate DECIMAL(5,2) NOT NULL DEFAULT 12.50,
+  tenure_months INT NOT NULL,
+  emi DECIMAL(15,2),
+  purpose VARCHAR(255),
+  employment_type VARCHAR(50),
+  monthly_income DECIMAL(15,2),
+  existing_emi DECIMAL(15,2) DEFAULT 0,
+  outstanding_principal DECIMAL(15,2) DEFAULT 0,
+  reference_id VARCHAR(50),
+  admin_notes TEXT,
+  status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_loans_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS loan_payments (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  loan_id BIGINT NOT NULL,
+  user_id INT NOT NULL,
+  amount DECIMAL(15,2) NOT NULL,
+  principal_component DECIMAL(15,2) NOT NULL,
+  interest_component DECIMAL(15,2) NOT NULL,
+  balance_after DECIMAL(15,2) NOT NULL,
+  reference_id VARCHAR(50) NOT NULL,
+  paid_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS add_info (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL UNIQUE,
+  date_of_birth DATE, mobile_number VARCHAR(20), pan VARCHAR(20), father_name VARCHAR(255),
+  alternate_email VARCHAR(255), communication_address TEXT, permanent_address TEXT,
+  marital_status VARCHAR(30), religion VARCHAR(80), category VARCHAR(80),
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS user_privileges (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL UNIQUE,
+  online_banking BOOLEAN DEFAULT TRUE, fund_transfer BOOLEAN DEFAULT TRUE,
+  card_access BOOLEAN DEFAULT TRUE, loan_application BOOLEAN DEFAULT TRUE,
+  high_value_transfer BOOLEAN DEFAULT FALSE,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cards (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  card_type VARCHAR(30) NOT NULL,
+  variant VARCHAR(30) NOT NULL DEFAULT 'CLASSIC',
+  cardholder_name VARCHAR(150),
+  delivery_address VARCHAR(500),
+  requested_limit DECIMAL(15,2),
+  card_number_masked VARCHAR(25),
+  status VARCHAR(20) NOT NULL DEFAULT 'REQUESTED',
+  daily_atm_limit DECIMAL(15,2) NOT NULL DEFAULT 25000,
+  daily_pos_limit DECIMAL(15,2) NOT NULL DEFAULT 100000,
+  online_enabled BOOLEAN NOT NULL DEFAULT TRUE,
+  international_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+  contactless_enabled BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_cards_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS investments (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  product_code VARCHAR(30) NOT NULL,
+  amount DECIMAL(15,2) NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_investments_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS insurance_policies (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  product_code VARCHAR(30) NOT NULL,
+  coverage_amount DECIMAL(15,2) NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_insurance_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS service_requests (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  service_code VARCHAR(50) NOT NULL,
+  details VARCHAR(1000),
+  status VARCHAR(20) NOT NULL DEFAULT 'OPEN',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_services_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS otps (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  otp_hash CHAR(64) NOT NULL,
+  action VARCHAR(30) NOT NULL,
+  used BOOLEAN NOT NULL DEFAULT FALSE,
+  attempts INT NOT NULL DEFAULT 0,
+  expires_at DATETIME NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_otps_lookup (email, action, used, created_at)
+);

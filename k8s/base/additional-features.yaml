@@ -1,0 +1,158 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: spx-accounts, namespace: spx-banking}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app.kubernetes.io/name: spx-accounts}}
+  template:
+    metadata: {labels: {app.kubernetes.io/name: spx-accounts, spx.feature: accounts}}
+    spec:
+      containers:
+        - name: accounts
+          image: SPX_SERVICE_IMAGE
+          ports: [{name: http, containerPort: 5000}]
+          envFrom: [{configMapRef: {name: spx-service-config}}]
+          env:
+            - {name: FEATURE, value: accounts}
+            - {name: DB_PASS, valueFrom: {secretKeyRef: {name: spx-secrets, key: mysql-password}}}
+            - {name: JWT_SECRET, valueFrom: {secretKeyRef: {name: spx-secrets, key: jwt-secret}}}
+          readinessProbe: {httpGet: {path: /healthz, port: http}, initialDelaySeconds: 5}
+          resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: 500m, memory: 256Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: spx-accounts, namespace: spx-banking}
+spec: {selector: {app.kubernetes.io/name: spx-accounts}, ports: [{port: 5000, targetPort: http}]}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: spx-loans, namespace: spx-banking}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app.kubernetes.io/name: spx-loans}}
+  template:
+    metadata: {labels: {app.kubernetes.io/name: spx-loans, spx.feature: loans}}
+    spec:
+      containers:
+        - name: loans
+          image: SPX_SERVICE_IMAGE
+          ports: [{name: http, containerPort: 5000}]
+          envFrom: [{configMapRef: {name: spx-service-config}}]
+          env:
+            - {name: FEATURE, value: loans}
+            - {name: DB_PASS, valueFrom: {secretKeyRef: {name: spx-secrets, key: mysql-password}}}
+            - {name: JWT_SECRET, valueFrom: {secretKeyRef: {name: spx-secrets, key: jwt-secret}}}
+            - {name: SMTP_USER, valueFrom: {secretKeyRef: {name: spx-secrets, key: smtp-user}}}
+            - {name: SMTP_PASSWORD, valueFrom: {secretKeyRef: {name: spx-secrets, key: smtp-password}}}
+          readinessProbe: {httpGet: {path: /healthz, port: http}, initialDelaySeconds: 5}
+          resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: 500m, memory: 256Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: spx-loans, namespace: spx-banking}
+spec: {selector: {app.kubernetes.io/name: spx-loans}, ports: [{port: 5000, targetPort: http}]}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: spx-cards, namespace: spx-banking}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app.kubernetes.io/name: spx-cards}}
+  template:
+    metadata: {labels: {app.kubernetes.io/name: spx-cards, spx.feature: cards}}
+    spec:
+      containers:
+        - name: cards
+          image: SPX_SERVICE_IMAGE
+          ports: [{name: http, containerPort: 5000}]
+          envFrom: [{configMapRef: {name: spx-service-config}}]
+          env:
+            - {name: FEATURE, value: cards}
+            - {name: DB_PASS, valueFrom: {secretKeyRef: {name: spx-secrets, key: mysql-password}}}
+            - {name: JWT_SECRET, valueFrom: {secretKeyRef: {name: spx-secrets, key: jwt-secret}}}
+          readinessProbe: {httpGet: {path: /healthz, port: http}, initialDelaySeconds: 5}
+          resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: 500m, memory: 256Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: spx-cards, namespace: spx-banking}
+spec: {selector: {app.kubernetes.io/name: spx-cards}, ports: [{port: 5000, targetPort: http}]}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: spx-investments, namespace: spx-banking}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app.kubernetes.io/name: spx-investments}}
+  template:
+    metadata: {labels: {app.kubernetes.io/name: spx-investments, spx.feature: investments}}
+    spec:
+      containers:
+        - name: investments
+          image: SPX_SERVICE_IMAGE
+          ports: [{name: http, containerPort: 5000}]
+          envFrom: [{configMapRef: {name: spx-service-config}}]
+          env:
+            - {name: FEATURE, value: investments}
+            - {name: DB_PASS, valueFrom: {secretKeyRef: {name: spx-secrets, key: mysql-password}}}
+            - {name: JWT_SECRET, valueFrom: {secretKeyRef: {name: spx-secrets, key: jwt-secret}}}
+          readinessProbe: {httpGet: {path: /healthz, port: http}, initialDelaySeconds: 5}
+          resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: 500m, memory: 256Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: spx-investments, namespace: spx-banking}
+spec: {selector: {app.kubernetes.io/name: spx-investments}, ports: [{port: 5000, targetPort: http}]}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: spx-insurance, namespace: spx-banking}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app.kubernetes.io/name: spx-insurance}}
+  template:
+    metadata: {labels: {app.kubernetes.io/name: spx-insurance, spx.feature: insurance}}
+    spec:
+      containers:
+        - name: insurance
+          image: SPX_SERVICE_IMAGE
+          ports: [{name: http, containerPort: 5000}]
+          envFrom: [{configMapRef: {name: spx-service-config}}]
+          env:
+            - {name: FEATURE, value: insurance}
+            - {name: DB_PASS, valueFrom: {secretKeyRef: {name: spx-secrets, key: mysql-password}}}
+            - {name: JWT_SECRET, valueFrom: {secretKeyRef: {name: spx-secrets, key: jwt-secret}}}
+          readinessProbe: {httpGet: {path: /healthz, port: http}, initialDelaySeconds: 5}
+          resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: 500m, memory: 256Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: spx-insurance, namespace: spx-banking}
+spec: {selector: {app.kubernetes.io/name: spx-insurance}, ports: [{port: 5000, targetPort: http}]}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: spx-services, namespace: spx-banking}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app.kubernetes.io/name: spx-services}}
+  template:
+    metadata: {labels: {app.kubernetes.io/name: spx-services, spx.feature: services}}
+    spec:
+      containers:
+        - name: services
+          image: SPX_SERVICE_IMAGE
+          ports: [{name: http, containerPort: 5000}]
+          envFrom: [{configMapRef: {name: spx-service-config}}]
+          env:
+            - {name: FEATURE, value: services}
+            - {name: DB_PASS, valueFrom: {secretKeyRef: {name: spx-secrets, key: mysql-password}}}
+            - {name: JWT_SECRET, valueFrom: {secretKeyRef: {name: spx-secrets, key: jwt-secret}}}
+          readinessProbe: {httpGet: {path: /healthz, port: http}, initialDelaySeconds: 5}
+          resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: 500m, memory: 256Mi}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: spx-services, namespace: spx-banking}
+spec: {selector: {app.kubernetes.io/name: spx-services}, ports: [{port: 5000, targetPort: http}]}
+

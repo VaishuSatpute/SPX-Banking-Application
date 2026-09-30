@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK — Master Control Center</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        
+        <!-- LEFT SIDEBAR NAVIGATION -->
+        {% include 'admin_sidebar.html' %}
+
+        <!-- MAIN CONTAINER -->
+        <main class="admin-main">
+            
+            <!-- TOP BAR -->
+            <header class="admin-topbar">
+                <div class="admin-topbar-title-group">
+                    <h1 class="admin-page-title">Master Control Center</h1>
+                    <span class="admin-badge-master">SPX OPERATIONS</span>
+                </div>
+
+                <div class="admin-topbar-actions">
+                    <div class="admin-status-indicator">
+                        <span class="status-dot-green"></span>
+                        <span>System Control: <strong>ACTIVE</strong></span>
+                    </div>
+
+                    <div style="font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9);" id="topbar-admin-name">
+                        Gokul Kakde
+                    </div>
+
+                    <button onclick="handleAdminLogout()" class="admin-logout-btn">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        Logout
+                    </button>
+                </div>
+            </header>
+
+            <!-- BODY CONTENT -->
+            <div class="admin-content">
+                
+                <!-- KPI METRIC CARDS -->
+                <div class="admin-stats-grid">
+                    
+                    <!-- Card 1: Users -->
+                    <div class="admin-stat-card">
+                        <div>
+                            <div class="stat-info-title">Total Customers</div>
+                            <div class="stat-info-value" id="stat-total-users">0</div>
+                            <div class="stat-info-sub">
+                                <span id="stat-active-users">0 Active</span> • 
+                                <span id="stat-locked-users" style="color: #dc2626;">0 Locked</span>
+                            </div>
+                        </div>
+                        <div class="stat-icon-wrapper bg-purple-light">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Deposits / Funds -->
+                    <div class="admin-stat-card">
+                        <div>
+                            <div class="stat-info-title">Total Customer Deposits</div>
+                            <div class="stat-info-value" id="stat-total-deposits">₹0.00</div>
+                            <div class="stat-info-sub" id="stat-total-accounts">0 Accounts</div>
+                        </div>
+                        <div class="stat-icon-wrapper bg-emerald-light">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Loans -->
+                    <div class="admin-stat-card">
+                        <div>
+                            <div class="stat-info-title">Loan Liabilities</div>
+                            <div class="stat-info-value" id="stat-total-loans">₹0.00</div>
+                            <div class="stat-info-sub" id="stat-pending-loans" style="color: #d97706;">0 Pending Applications</div>
+                        </div>
+                        <div class="stat-icon-wrapper bg-amber-light">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Cards -->
+                    <div class="admin-stat-card">
+                        <div>
+                            <div class="stat-info-title">Issued Cards</div>
+                            <div class="stat-info-value" id="stat-total-cards">0</div>
+                            <div class="stat-info-sub" id="stat-active-cards">0 Active Cards</div>
+                        </div>
+                        <div class="stat-icon-wrapper bg-blue-light">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect></svg>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RECENT AUDIT LOG FEED -->
+                <div class="admin-card-table">
+                    <div class="table-header-toolbar">
+                        <div class="table-title">Live Administrative Activity Feed</div>
+                        <a href="/admin/audit-logs" class="btn-action-small btn-action-primary">View Full Audit Log</a>
+                    </div>
+                    
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Action</th>
+                                    <th>Details</th>
+                                    <th>Admin Identity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboard-audit-feed">
+                                <tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--admin-text-muted);">Loading live activity logs...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>
+
+

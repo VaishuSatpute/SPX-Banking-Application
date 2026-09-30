@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK - Net Banking</title>
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon.png">
+    <meta name="description" content="Secure Online Net Banking Portal by SPX BANK.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css?v=cec0520-login-fix">
+    <style>
+        /* Scope fix for authentication views only: ensure OTP drawer overlays the header (z-index 1001) */
+        .otp-drawer-overlay {
+            z-index: 99999 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Notification Toast System -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- MAIN PORTAL WRAPPER -->
+    <div class="portal-wrapper">
+        
+        <!-- SPX BANK TOP NAVIGATION STRIP -->
+        <div class="spx-top-nav">
+            <div class="spx-top-nav-container">
+                <div class="spx-top-nav-left">
+                    <span class="spx-top-tab">Personal Banking</span>
+                    <a href="#" class="spx-top-link">Skip to main content</a>
+                    <a href="#" class="spx-top-link">Corporate website</a>
+                </div>
+                <div class="spx-top-nav-right">
+                    <a href="#" class="spx-top-link spx-icon-link" onclick="triggerQuickAction('Get Help')">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Get Help
+                    </a>
+                    <a href="#" class="spx-top-link spx-icon-link" onclick="triggerQuickAction('WhatsApp Banking')">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        WhatsApp
+                    </a>
+                    <div class="spx-top-link spx-lang-selector">
+                        English
+                        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-font-btn">A-</button>
+                    <button class="spx-font-btn">A</button>
+                    <button class="spx-font-btn">A+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN BRANDING HEADER -->
+        <header class="spx-main-header">
+            <div class="spx-header-container">
+                <div class="spx-logo-block" onclick="switchView('login')">
+                    <span class="spx-text">SPX BANK</span>
+                    <span class="net-banking-tag">NET-BANKING</span>
+                </div>
+                
+                <!-- NAVIGATION MENU -->
+                <nav class="spx-main-nav">
+                    <!-- Dynamic switching of menu items based on login status -->
+                    <div class="spx-nav-menu logged-out-menu">
+                        <a href="#" class="spx-nav-item active" onclick="switchView('login')">Home</a>
+                        <a href="#" class="spx-nav-item" onclick="triggerQuickAction('Accounts & Deposits Info')">Accounts & Deposits</a>
+                        <a href="#" class="spx-nav-item" onclick="triggerQuickAction('Loans Info')">Loans</a>
+                        <a href="#" class="spx-nav-item" onclick="triggerQuickAction('Cards Info')">Cards</a>
+                        <a href="#" class="spx-nav-item" onclick="triggerQuickAction('Investments Info')">Investments</a>
+                    </div>
+                    <div class="spx-nav-menu logged-in-menu hidden">
+                        <a href="#" class="spx-nav-item active" onclick="switchView('dashboard')">Overview</a>
+                        <a href="#" class="spx-nav-item" onclick="triggerQuickAction('Accounts dashboard')">Accounts</a>
+                        <a id="nav-payments-tab" class="spx-nav-item" href="#">Payments</a>
+                        <a id="nav-deposits-tab" class="spx-nav-item" href="#">Deposits</a>
+                        <a id="nav-loans-tab" class="spx-nav-item" href="#">Loans</a>
+                        <a id="nav-cards-tab" class="spx-nav-item" href="#">Cards</a>
+                        <a id="nav-investments-tab" class="spx-nav-item" href="#">Investments</a>
+                        <a id="nav-insurance-tab" class="spx-nav-item" href="#">Insurance</a>
+                        <a id="nav-services-tab" class="spx-nav-item" href="#">Services</a>
+                        <div id="services-mega-menu" class="spx-services-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Quick Services -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Services</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Account Related')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><polygon points="12 2 2 7 22 7"></polygon><polyline points="2 17 2 22 22 22 22 17"></polyline><line x1="6" y1="17" x2="6" y2="7"></line><line x1="10" y1="17" x2="10" y2="7"></line><line x1="14" y1="17" x2="14" y2="7"></line><line x1="18" y1="17" x2="18" y2="7"></line></svg>
+                    <span>Account Related</span>
+                </li>
+                <li onclick="triggerQuickAction('Pension Related')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                    <span>Pension Related</span>
+                </li>
+                <li onclick="triggerQuickAction('Tax Related')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Tax Related</span>
+                </li>
+                <li onclick="triggerQuickAction('Cheque Services')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Cheque Services</span>
+                </li>
+                <li onclick="triggerQuickAction('Doorstep Banking')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Doorstep Banking</span>
+                </li>
+                <li onclick="triggerQuickAction('Positive Pay System')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Positive Pay System</span>
+                </li>
+                <li onclick="triggerQuickAction('Apply/Manage FASTag')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><circle cx="7" cy="7" r="1.5"></circle></svg>
+                    <span>Apply/Manage FASTag</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Nominee')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Manage Nominee</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage My Profile')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Manage My Profile</span>
+                </li>
+                <li onclick="triggerQuickAction('e-Secure Lock')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>e-Secure Lock</span>
+                </li>
+                <li onclick="triggerQuickAction('Stop Cheque')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Stop Cheque</span>
+                </li>
+                <li onclick="triggerQuickAction('Update My Security')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Update My Security</span>
+                </li>
+                <li onclick="triggerQuickAction('Report Unauthorized Transactions')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span>Report- Unauthorized Transactions</span>
+                </li>
+                <li onclick="triggerQuickAction('Security Question')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Security Question</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                    </div>
+                </nav>
+
+                <div id="mega-menu-overlay" class="spx-mega-overlay"></div>
+<div id="payments-mega-menu" class="spx-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Fund Transfer</h5>
+            <ul class="spx-mega-list">
+                <a href="/home/landingPage/profilePage/send-money/fund-transfer" style="text-decoration: none; color: inherit; display: contents;">
+                    <li>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        <span>Send Money</span>
+                    </li>
+                </a>
+                <li onclick="triggerQuickAction('Bill Payments')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+                    <span>Bill Payments</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <a href="/home/landingPage/manageRelationship/transactionAccounts" style="text-decoration: none; color: inherit; display: contents;">
+                    <li>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <span>Transaction History</span>
+                    </li>
+                </a>
+                <li onclick="triggerQuickAction('Manage Limits')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Manage Limits</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="deposits-mega-menu" class="spx-deposits-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Fixed Deposit')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    <span>Fixed Deposit</span>
+                </li>
+                <li onclick="triggerQuickAction('Recurring Deposit')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    <span>Recurring Deposit</span>
+                </li>
+                <li onclick="triggerQuickAction('Annuity Deposit')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <span>Annuity Deposit</span>
+                </li>
+                <li onclick="triggerQuickAction('Auto Sweep')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path><path d="M12 8l4 4-4 4"></path></svg>
+                    <span>Auto Sweep</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Deposits')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>Manage Deposits</span>
+                </li>
+                <li onclick="triggerQuickAction('View Interest Rate')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+                    <span>View Interest Rate</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage PPF Accounts')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                    <span>Manage PPF Accounts</span>
+                </li>
+                <li onclick="triggerQuickAction('Deposit Requests')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>Requests</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="loans-mega-menu" class="spx-loans-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Products -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Personal Loan')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Personal Loan</span>
+                </li>
+
+                <li style="cursor: default; opacity: 0.65; pointer-events: none; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span>Home Loan</span>
+                    </div>
+                    <span class="badge bg-light text-muted" style="font-size: 10px;">Soon</span>
+                </li>
+
+                <li style="cursor: default; opacity: 0.65; pointer-events: none; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                        <span>Education Loan</span>
+                    </div>
+                    <span class="badge bg-light text-muted" style="font-size: 10px;">Soon</span>
+                </li>
+                
+                <li style="cursor: default; opacity: 0.65; pointer-events: none; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                        <span>Gold Loan</span>
+                    </div>
+                    <span class="badge bg-light text-muted" style="font-size: 10px;">Soon</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+
+                <li onclick="triggerQuickAction('Manage Loans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    <span>Manage Loans</span>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="cards-mega-menu" class="spx-cards-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Products -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Credit Cards')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Credit Cards</span>
+                </li>
+                <li onclick="triggerQuickAction('Debit Cards')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    <span>Debit Cards</span>
+                </li>
+
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Credit Card')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Manage Credit Card</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage Debit Card')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    <span>Manage Debit Card</span>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="investments-mega-menu" class="spx-investments-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Products -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Mutual Funds')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M7 20h10"></path><path d="M10 20c5.5-5.5.5-16 .5-16"></path><path d="M10.5 4.5c2.5 2.5 2.5 7 0 9.5"></path></svg>
+                    <span>Mutual Funds</span>
+                </li>
+                <li onclick="triggerQuickAction('NPS')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 12A10 10 0 0 0 2 12h20Z"></path><path d="M12 12v8a2 2 0 0 0 4 0"></path></svg>
+                    <span>NPS</span>
+                </li>
+                <li onclick="triggerQuickAction('PPF')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M8 21h8a4 4 0 0 0 4-4v-3a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v3a4 4 0 0 0 4 4z"></path><circle cx="12" cy="15" r="2"></circle><path d="M10 10s1.5-4 2-4 2 4 2 4"></path></svg>
+                    <span>PPF</span>
+                </li>
+                <li onclick="triggerQuickAction('IPO')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>IPO</span>
+                </li>
+                <li onclick="triggerQuickAction('Demat & Securities')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    <span>Demat & Securities</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Mutual Fund')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M7 20h10"></path><path d="M10 20c5.5-5.5.5-16 .5-16"></path><path d="M10.5 4.5c2.5 2.5 2.5 7 0 9.5"></path></svg>
+                    <span>Manage Mutual Fund</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage NPS Account')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 12A10 10 0 0 0 2 12h20Z"></path><path d="M12 12v8a2 2 0 0 0 4 0"></path></svg>
+                    <span>Manage NPS Account</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage PPF')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M8 21h8a4 4 0 0 0 4-4v-3a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v3a4 4 0 0 0 4 4z"></path><circle cx="12" cy="15" r="2"></circle><path d="M10 10s1.5-4 2-4 2 4 2 4"></path></svg>
+                    <span>Manage PPF</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="insurance-mega-menu" class="spx-insurance-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- COLUMN 1: Life Insurance -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Life Insurance</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Protection Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Protection Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Child Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="8" r="5"></circle><path d="M18 20c0-3.3-4-6-6-6s-6 2.7-6 6"></path></svg>
+                    <span>Child Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Retirement Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 12A10 10 0 0 0 2 12h20Z"></path><path d="M12 12v8a2 2 0 0 0 4 0"></path></svg>
+                    <span>Retirement Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Wealth Creation')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>Wealth Creation</span>
+                </li>
+                <li onclick="triggerQuickAction('Savings Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"></path></svg>
+                    <span>Savings Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Group Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Group Plans</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- COLUMN 2: General Insurance -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">General Insurance</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Health Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path></svg>
+                    <span>Health Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Motor Insurance')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg>
+                    <span>Motor Insurance</span>
+                </li>
+                <li onclick="triggerQuickAction('Travel Insurance')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="6" y="8" width="12" height="14" rx="2" ry="2"></rect><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M10 12h4"></path><path d="M10 16h4"></path></svg>
+                    <span>Travel Insurance</span>
+                </li>
+                <li onclick="triggerQuickAction('Accident Insurance')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span>Accident Insurance</span>
+                </li>
+                <li onclick="triggerQuickAction('Group Plans (General)')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Group Plans</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- COLUMN 3: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Policies')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Manage Policies</span>
+                </li>
+                <li onclick="triggerQuickAction('Resume Application')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                    <span>Resume Application</span>
+                </li>
+                <li onclick="triggerQuickAction('Tools & Calculators')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="10" y2="10"></line><line x1="14" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="10" y2="14"></line><line x1="14" y1="14" x2="16" y2="14"></line><line x1="8" y1="18" x2="10" y2="18"></line><line x1="14" y1="18" x2="16" y2="18"></line></svg>
+                    <span>Tools & Calculators</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="spx-search-dropdown" class="spx-search-modal">
+  <!-- Global Search Input -->
+  <div class="search-input-wrapper">
+    <span class="search-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    </span>
+    <input type="text" id="global-search-input" class="search-input-field" placeholder="Search by Products, Services, Payees" autocomplete="off" />
+  </div>
+
+  <!-- Recommended Section -->
+  <div class="search-recommended-box">
+    <h6 class="recommended-title">Recommended</h6>
+    <div class="recommended-items-grid">
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+        </div>
+        <span>Credit Cards</span>
+      </a>
+
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>Insurance</span>
+      </a>
+
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path><path d="M12 6v6l4 2"></path></svg>
+        </div>
+        <span>Loan Repayment</span>
+      </a>
+
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+        </div>
+        <span>Mutual Funds</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+                <!-- Notification Dropdown Modal -->
+<div id="spx-notification-dropdown" class="spx-notification-modal d-none">
+    <div class="notification-empty-state">
+        <div class="notification-graphic">
+            <svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                <!-- Dotted orbit -->
+                <circle cx="75" cy="75" r="50" fill="none" stroke="#d1c4e9" stroke-width="1.5" stroke-dasharray="4 4" />
+                <!-- Small purple gradient circle -->
+                <circle cx="45" cy="45" r="12" fill="url(#grad1)" />
+                <!-- Large purple circle with subtle patterns -->
+                <circle cx="85" cy="85" r="35" fill="url(#grad2)" />
+                <path d="M75 75 Q 85 65 95 75 Q 85 85 75 75" fill="#ffffff" opacity="0.2"/>
+                <!-- Definitions for gradients -->
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#b39ddb" />
+                        <stop offset="100%" stop-color="#7e57c2" />
+                    </linearGradient>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#d1c4e9" />
+                        <stop offset="100%" stop-color="#b39ddb" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <h4 class="notification-title">All caught up!</h4>
+        <p class="notification-subtitle">There are no new notifications</p>
+    </div>
+</div>
+
+
+
+                <div class="spx-header-actions logged-in-only hidden">
+                    <button class="spx-header-icon-btn" id="search-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                    <button class="spx-header-icon-btn" id="notification-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </button>
+                    <a href="/home/landingPage/profilePage/services/manageProfile/personalDetails" class="spx-user-badge" id="nav-profile-badge" style="text-decoration: none;">
+                        <span class="spx-avatar-initials" id="dash-avatar">SPX</span>
+                        <span class="spx-user-profile-label">My Profile</span>
+                    </a>
+                    <button class="spx-logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- PORTAL MAIN CONTENT -->
+        <main class="spx-portal-body">
+            
+            <!-- GLOBAL GO BACK BUTTON -->
+            <div class="spx-global-back-container">
+                <button type="button" class="spx-global-back-btn" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Go Back
+                </button>
+            </div>
+            
+            <!-- AUTH LAYOUT CONTAINER (SPLIT PANELS) -->
+            <div id="auth-flow-container" class="spx-auth-container">
+                <div class="spx-auth-split">
+                    
+                    <!-- Left Welcome Panel -->
+                    <div class="spx-welcome-panel">
+                        <h2 class="spx-hello-title">Hello!</h2>
+                        <h3 class="spx-welcome-subtitle">Welcome to the world of SPX BANK</h3>
+                        
+                        <div class="spx-new-user-section">
+                            <p class="spx-new-user-label">Are you a new user?</p>
+                            <p class="spx-new-user-desc">Choose the option below to get started</p>
+                            <div class="spx-new-user-actions">
+                                <button class="spx-btn-purple-fill" onclick="switchView('register')">Register Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Registration Benefits (Shown only on Register View) -->
+                        <div class="spx-register-benefits-section">
+                            <ul class="spx-benefits-list">
+                                <li>
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                    Fast & Secure Account Setup
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                    24/7 Digital Banking Access
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                    Advanced Fraud Protection
+                                </li>
+                            </ul>
+                            <div class="spx-login-prompt">
+                                <p>Already have an account?</p>
+                                <button class="spx-btn-purple-outline" onclick="switchView('login')">Login Here</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Card Panel (Authentication forms) -->
+                    <div class="spx-card-panel">
+                        
+                        <!-- VIEW 1: LOGIN CARD -->
+                        <section id="login-view" class="spx-portal-card view-active">
+                            <div class="spx-card-title">
+                                <h3>Username / Password</h3>
+                            </div>
+
+                            <form id="login-form" onsubmit="handleLoginSubmit(event)" class="spx-form">
+                                <!-- Username (Email mapped for logic compatibility) -->
+                                <div class="spx-form-group">
+                                    <label for="login-username" class="spx-form-label">Username / Email</label>
+                                    <div class="spx-input-container">
+                                        <input type="text" id="login-username" class="spx-form-input" placeholder="Enter username or email" required autocomplete="username">
+                                    </div>
+                                </div>
+
+                                <!-- Password Field -->
+                                <div class="spx-form-group">
+                                    <label for="login-password" class="spx-form-label">Password</label>
+                                    <div class="spx-input-container">
+                                        <input type="password" id="login-password" class="spx-form-input spx-password-input" placeholder="Enter Password" required autocomplete="off">
+                                        <div class="spx-input-addon-buttons">
+                                            <button type="button" class="spx-input-btn" onclick="togglePasswordVisibility('login-password', this)" title="Show/Hide Password">
+                                                <svg class="eye-open" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                <svg class="eye-closed hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                    <div id="login-error-msg" style="color: #ff4d4d; font-size: 0.85rem; margin-top: 0.5rem; display: none;"></div>
+                                    <div class="spx-form-assist-row">
+                                        <button type="button" class="spx-assist-btn" onclick="switchView('forgot-password')">Forgot Password?</button>
+                                    </div>
+                                </div>
+
+                                <!-- CAPTCHA -->
+                                <div class="spx-form-group">
+                                    <label for="login-captcha-input" class="spx-form-label">Enter Captcha</label>
+                                    <div class="spx-captcha-layout">
+                                        <input type="text" id="login-captcha-input" class="spx-captcha-input" placeholder="Enter Captcha" required autocomplete="off" maxlength="6">
+                                        <div class="spx-captcha-image-block">
+                                            <canvas id="login-captcha-canvas" width="110" height="38"></canvas>
+                                            <div class="spx-captcha-actions">
+                                                <button type="button" class="spx-captcha-action-btn" onclick="generateCaptcha('login')" title="Refresh Captcha">
+                                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="spx-submit-container">
+                                    <button type="submit" class="spx-btn-login" id="btn-login">
+                                        <span class="btn-text">Login</span>
+                                        <span class="btn-spinner hidden"></span>
+                                    </button>
+                                </div>
+
+                            </form>
+                        </section>
+
+
+                        <!-- VIEW 2: REGISTER CARD -->
+                        <div id="register-view" class="view-wrapper hidden">
+
+                            <section class="spx-portal-card">
+                                <div class="spx-card-title">
+                                    <h3>New Registration</h3>
+                                </div>
+
+                                <form id="register-form" onsubmit="handleRegisterSubmit(event)" class="spx-form">
+                                    <div class="spx-form-row">
+                                        <div class="spx-form-group">
+                                            <label for="reg-firstname" class="spx-form-label">First Name</label>
+                                            <input type="text" id="reg-firstname" class="spx-form-input" placeholder="First Name" required autocomplete="off">
+                                        </div>
+                                        <div class="spx-form-group">
+                                            <label for="reg-lastname" class="spx-form-label">Last Name</label>
+                                            <input type="text" id="reg-lastname" class="spx-form-input" placeholder="Last Name" required autocomplete="off">
+                                        </div>
+                                    </div>
+
+                                    <div class="spx-form-group">
+                                        <label for="reg-email" class="spx-form-label">Email Address</label>
+                                        <input type="email" id="reg-email" class="spx-form-input" placeholder="" required autocomplete="off">
+                                    </div>
+
+                                    <div class="spx-form-group">
+                                        <label for="reg-username" class="spx-form-label">Username</label>
+                                        <input type="text" id="reg-username" class="spx-form-input" placeholder="Username" required autocomplete="off">
+                                    </div>
+
+                                    <div class="spx-form-group">
+                                        <label for="reg-password" class="spx-form-label">Security Password</label>
+                                        <div class="spx-input-container">
+                                            <input type="password" id="reg-password" class="spx-form-input spx-password-input" placeholder="" required autocomplete="off" oninput="checkPasswordStrength(this.value)">
+                                            <button type="button" class="spx-input-btn absolute-btn" onclick="togglePasswordVisibility('reg-password', this)">
+                                                <svg class="eye-open" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                <svg class="eye-closed hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                                            </button>
+                                        </div>
+                                        <div class="strength-meter">
+                                            <div id="strength-bar" class="strength-bar"></div>
+                                        </div>
+                                        <span id="strength-text" class="strength-text">Password Rating</span>
+                                    </div>
+
+                                    <!-- CAPTCHA -->
+                                    <div class="spx-form-group">
+                                        <label for="reg-captcha-input" class="spx-form-label">Enter Captcha</label>
+                                        <div class="spx-captcha-layout">
+                                            <input type="text" id="reg-captcha-input" class="spx-captcha-input" placeholder="Enter Captcha" required autocomplete="off" maxlength="6">
+                                            <div class="spx-captcha-image-block">
+                                                <canvas id="reg-captcha-canvas" width="110" height="38"></canvas>
+                                                <div class="spx-captcha-actions">
+                                                    <button type="button" class="spx-captcha-action-btn" onclick="generateCaptcha('reg')" title="Refresh Captcha">
+                                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="reg-error-msg" style="color: #ff4d4d; font-size: 0.85rem; margin-bottom: 1rem; display: none;"></div>
+
+                                    <div class="spx-submit-container">
+                                        <button type="submit" class="spx-btn-login" id="btn-register">
+                                            <span class="btn-text">Verify & Register</span>
+                                            <span class="btn-spinner hidden"></span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </section>
+                        </div>
+
+
+                        <!-- VIEW 3: FORGOT PASSWORD CARD -->
+                        <div id="forgot-password-view" class="view-wrapper hidden">
+
+                            <section class="spx-portal-card">
+                                <div class="spx-card-title">
+                                    <h3>Password Recovery</h3>
+                                </div>
+
+                                <!-- STEP 1 -->
+                                <form id="forgot-password-form-1" onsubmit="handleForgotPasswordRequest(event)" class="spx-form">
+                                    <div class="spx-form-group">
+                                        <label for="reset-email" class="spx-form-label">Email Address</label>
+                                        <input type="email" id="reset-email" class="spx-form-input" placeholder="" required>
+                                    </div>
+
+                                    <!-- CAPTCHA -->
+                                    <div class="spx-form-group">
+                                        <label for="reset-captcha-input" class="spx-form-label">Enter Captcha</label>
+                                        <div class="spx-captcha-layout">
+                                            <input type="text" id="reset-captcha-input" class="spx-captcha-input" placeholder="Enter Captcha" required autocomplete="off" maxlength="6">
+                                            <div class="spx-captcha-image-block">
+                                                <canvas id="reset-captcha-canvas" width="110" height="38"></canvas>
+                                                <div class="spx-captcha-actions">
+                                                    <button type="button" class="spx-captcha-action-btn" onclick="generateCaptcha('reset')" title="Refresh Captcha">
+                                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="spx-submit-container">
+                                        <button type="submit" class="spx-btn-login" id="btn-forgot-1">
+                                            <span class="btn-text">Send Recovery OTP</span>
+                                            <span class="btn-spinner hidden"></span>
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <!-- STEP 2 -->
+                                <form id="forgot-password-form-2" class="spx-form hidden" onsubmit="handleNewPasswordSubmit(event)">
+                                    <div class="step-indicator success-step">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                        <span>OTP Verified for <strong id="reset-verified-email"></strong></span>
+                                    </div>
+
+                                    <div class="spx-form-group">
+                                        <label for="new-password" class="spx-form-label">Create New Password</label>
+                                        <div class="spx-input-container">
+                                            <input type="password" id="new-password" class="spx-form-input spx-password-input" placeholder="Enter new password" required autocomplete="off">
+                                            <button type="button" class="spx-input-btn absolute-btn" onclick="togglePasswordVisibility('new-password', this)">
+                                                <svg class="eye-open" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                <svg class="eye-closed hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="spx-form-group">
+                                        <label for="confirm-new-password" class="spx-form-label">Confirm New Password</label>
+                                        <div class="spx-input-container">
+                                            <input type="password" id="confirm-new-password" class="spx-form-input spx-password-input" placeholder="Confirm new password" required autocomplete="off">
+                                            <button type="button" class="spx-input-btn absolute-btn" onclick="togglePasswordVisibility('confirm-new-password', this)">
+                                                <svg class="eye-open" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                <svg class="eye-closed hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Inline error: shown when new password matches old password -->
+                                    <div id="reset-pw-error-msg" class="spx-reset-error"></div>
+
+                                    <div class="spx-submit-container">
+                                        <button type="submit" class="spx-btn-login" id="btn-forgot-2">
+                                            <span class="btn-text">Update & Sign In</span>
+                                            <span class="btn-spinner hidden"></span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </section>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SPX SIGNATURE WAVES AND QUICK ACTIONS BAR -->
+                <div class="spx-auth-bottom-banner">
+                    <div class="spx-wave-wrapper">
+                        <!-- Curved Waves mirroring screenshot background -->
+                        <svg class="spx-background-waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 220" preserveAspectRatio="none">
+                            <path fill="#6d1c7f" fill-opacity="0.25" d="M0,80 C180,120 360,130 540,110 C720,90 900,40 1080,50 C1260,60 1380,130 1440,160 L1440,220 L0,220 Z"></path>
+                            <path fill="#501b80" fill-opacity="0.85" d="M0,120 C160,160 320,170 480,150 C640,130 800,80 960,90 C1120,100 1280,170 1440,190 L1440,220 L0,220 Z"></path>
+                            <path fill="#3c1253" d="M0,150 C120,180 240,195 360,190 C480,185 600,160 720,150 C840,140 960,150 1080,160 C1200,170 1320,190 1440,205 L1440,220 L0,220 Z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- DASHBOARD CONTAINER (SPX BANK HIGH FIDELITY LAYOUT) -->
+            <div id="dashboard-view" class="spx-dashboard-container hidden">
+                
+                <!-- GREETING ROW -->
+                <div class="spx-dash-greeting-bar">
+                    <span class="spx-dash-greeting-text">Hi <strong id="dash-user-name">John Doe</strong>, Hope you're doing well!</span>
+                </div>
+
+                <!-- HORIZONTAL CIRCULAR LINKS CAROUSEL -->
+                <div class="spx-carousel-section">
+                    <div class="spx-carousel-wrapper">
+                        <div class="spx-carousel-item" onclick="triggerQuickAction('IPO Application')">
+                            <div class="spx-carousel-icon bg-cyan">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                            </div>
+                            <span class="spx-carousel-label">IPO</span>
+                        </div>
+                        <div class="spx-carousel-item" onclick="triggerQuickAction('Fraud Awareness')">
+                            <div class="spx-carousel-icon bg-rose">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                            </div>
+                            <span class="spx-carousel-label">Fraud Awareness</span>
+                        </div>
+                        <div class="spx-carousel-item" onclick="triggerQuickAction('Discover Services')">
+                            <div class="spx-carousel-icon bg-blue">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+                            </div>
+                            <span class="spx-carousel-label">Discover</span>
+                        </div>
+                        <div class="spx-carousel-item" onclick="triggerQuickAction('Savings Account Details')">
+                            <div class="spx-carousel-icon bg-emerald">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            </div>
+                            <span class="spx-carousel-label">Savings Ac</span>
+                        </div>
+                        <div class="spx-carousel-item" onclick="triggerQuickAction('Education Loan')">
+                            <div class="spx-carousel-icon bg-orange">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path></svg>
+                            </div>
+                            <span class="spx-carousel-label">Education Loan</span>
+                        </div>
+                        <div class="spx-carousel-item" onclick="triggerQuickAction('Welcome to SPX BANK Tutorial')">
+                            <div class="spx-carousel-icon bg-purple">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            </div>
+                            <span class="spx-carousel-label">Welcome to SPX BANK</span>
+                        </div>
+                        <div class="spx-carousel-item" onclick="triggerQuickAction('Elevate Spends offer')">
+                            <div class="spx-carousel-icon bg-pink">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                            </div>
+                            <span class="spx-carousel-label">Elevate spends</span>
+                        </div>
+                        <div class="spx-carousel-item" onclick="triggerQuickAction('Secure Savings Scheme')">
+                            <div class="spx-carousel-icon bg-indigo">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            </div>
+                            <span class="spx-carousel-label">Secure Your Savings</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2-COLUMN DASHBOARD GRID -->
+                <div class="spx-dash-grid">
+                    
+                    <!-- Left: Relationship Overview -->
+                    <div class="spx-dash-column-left">
+                        <div class="spx-section-header-row">
+                            <h4 class="spx-section-title">Relationship Overview</h4>
+                            <button class="spx-view-accounts-btn" onclick="triggerQuickAction('View All Accounts')">View All Accounts</button>
+                        </div>
+                        
+                        <div class="spx-cards-container">
+                            <!-- Card 1: TRANSACTION ACCOUNTS -->
+                            <div class="spx-overview-card bg-purple-gradient">
+                                <div class="spx-ov-card-header">
+                                    <span>TRANSACTION ACCOUNTS</span>
+                                    <button class="spx-eye-btn" id="balance-eye-icon" onclick="toggleBalanceVisibility()" title="Show/Hide Balance">
+                                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                                    </button>
+                                </div>
+                                <div class="spx-ov-card-body">
+                                    <span class="spx-ov-label">Combined Balance</span>
+                                    <h2 class="spx-ov-balance">₹<span id="dash-balance" data-hidden="true" data-actual-balance="0.00">XXXX.XX</span> INR</h2>
+                                    <p class="spx-ov-subtext" id="dash-acc-num">ACC: —</p>
+                                    <p class="spx-ov-subtext-small" id="dash-acc-type">Savings Account</p>
+                                </div>
+                                <div class="spx-ov-card-footer">
+                                    <button class="spx-card-action-btn" onclick="triggerQuickAction('View Accounts')">View Accounts</button>
+                                    <button class="spx-card-action-btn fill" onclick="triggerQuickAction('Bank Statements')">Transactions</button>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: DEPOSITS -->
+                            <div class="spx-overview-card bg-light-purple">
+                                <div class="spx-ov-card-header">
+                                    <span>DEPOSITS</span>
+                                </div>
+                                <div class="spx-ov-card-body flex-grow">
+                                    <span class="spx-ov-label">Grow your money faster</span>
+                                    <p class="spx-ov-promo-text">Get high-yield interest rates up to 7.5% per annum on Fixed & Recurring Deposits.</p>
+                                </div>
+                                <div class="spx-ov-card-footer">
+                                    <button class="spx-card-action-btn outline-purple" onclick="triggerQuickAction('Create Fixed Deposit')">Explore</button>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: LOANS -->
+                            <div class="spx-overview-card bg-blue-gradient">
+                                <div class="spx-ov-card-header">
+                                    <span>LOANS</span>
+                                </div>
+                                <div class="spx-ov-card-body">
+                                    <span class="spx-ov-label">Total Outstanding Amount</span>
+                                    <h2 class="spx-ov-balance">₹0.00 INR</h2>
+                                    <p class="spx-ov-subtext">No active loan liabilities</p>
+                                </div>
+                                <div class="spx-ov-card-footer">
+                                    <button class="spx-card-action-btn" onclick="triggerQuickAction('View Loan Details')">View Details</button>
+                                    <button class="spx-card-action-btn fill" onclick="triggerQuickAction('Apply for Loan')">Manage Loan</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PORTAL AUDIT LOGS SECTION -->
+                        <div class="spx-audit-section">
+                            <h4 class="spx-section-title-small">Portal Audit History & Status</h4>
+                            <div class="spx-audit-list" id="activity-list">
+                                <div class="spx-audit-item">
+                                    <div class="spx-audit-left">
+                                        <div class="spx-audit-icon">
+                                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                        </div>
+                                        <div class="spx-audit-details">
+                                            <strong>CAPTCHA & Gmail OTP Authentication</strong>
+                                            <span class="spx-audit-time" id="last-login-time">Just Now • Verified IP</span>
+                                        </div>
+                                    </div>
+                                    <span class="spx-audit-badge green">Passed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Services Sidebar Categories -->
+                    <div class="spx-dash-column-right">
+                        
+                        <!-- DEPOSITS -->
+                        <div class="spx-sidebar-widget">
+                            <div class="spx-widget-header">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                <span>Deposits</span>
+                            </div>
+                            <ul class="spx-widget-links">
+                                <li><a href="#" onclick="triggerQuickAction('Fixed Deposit')">Fixed Deposit</a></li>
+                                <li><a href="#" onclick="triggerQuickAction('Recurring Deposit')">Recurring Deposit</a></li>
+                                <li><a href="#" onclick="triggerQuickAction('Annuity Deposit')">Annuity Deposit</a></li>
+                                <li><a href="#" onclick="triggerQuickAction('Auto Sweep')">Auto Sweep</a></li>
+                                <li class="view-all"><a href="#" onclick="triggerQuickAction('View All Deposits')">View All</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- LOANS -->
+                        <div class="spx-sidebar-widget">
+                            <div class="spx-widget-header">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                <span>Loans</span>
+                            </div>
+                            <ul class="spx-widget-links">
+                                <li><a href="#" onclick="triggerQuickAction('Personal Loan')">Personal Loan</a></li>
+                                <li><a href="#" onclick="triggerQuickAction('Loan Against Mutual Fund')">Loan Against Mutual Fund</a></li>
+                                <li><a href="#" onclick="triggerQuickAction('Home Loan')">Home Loan</a></li>
+                                <li><a href="#" onclick="triggerQuickAction('Gold Loan')">Gold Loan</a></li>
+                                <li class="view-all"><a href="#" onclick="triggerQuickAction('View All Loans')">View All</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- INVESTMENTS -->
+                        <div class="spx-sidebar-widget">
+                            <div class="spx-widget-header">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                                <span>Investments</span>
+                            </div>
+                            <ul class="spx-widget-links">
+                                <li><a href="#" onclick="triggerQuickAction('Mutual Funds')">Mutual Funds</a></li>
+                                <li><a href="#" onclick="triggerQuickAction('Demat & Securities')">Demat & Securities</a></li>
+                                <li><a href="#" onclick="triggerQuickAction('NPS')">NPS</a></li>
+                                <li><a href="#" onclick="triggerQuickAction('PPF')">PPF</a></li>
+                                <li class="view-all"><a href="#" onclick="triggerQuickAction('View All Investments')">View All</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- CARDS -->
+                        <div class="spx-sidebar-widget">
+                            <div class="spx-widget-header">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                                <span>Cards</span>
+                            </div>
+                            <ul class="spx-widget-links">
+                                <li><a href="#" onclick="triggerQuickAction('Credit Cards')">Credit Cards</a></li>
+                                <li><a href="#" onclick="triggerQuickAction('Debit Cards')">Debit Cards</a></li>
+
+                                <li class="view-all"><a href="#" onclick="triggerQuickAction('View All Cards')">View All</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+
+        <!-- OTP VERIFICATION DRAWER (SLIDING PANEL MATCHING THE SCREENSHOT) -->
+        <div id="otp-modal-overlay" class="otp-drawer-overlay hidden">
+            <div class="otp-drawer">
+                <div class="otp-drawer-header">
+                    <button class="otp-close-btn" onclick="closeOtpModal()" title="Close OTP Verification">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                
+                <div class="otp-drawer-content">
+                    <p class="otp-delivery-notice">
+                        An OTP has been sent to your registered mobile number / Gmail: <br>
+                        <strong id="otp-target-display" class="spx-otp-target">user@gmail.com</strong>
+                    </p>
+
+                    <!-- OTP Code Inputs -->
+                    <div class="spx-otp-fields-row">
+                        <div class="otp-inputs-wrapper" id="otp-inputs">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="0" autofocus>
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="1">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="2">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="3">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="4">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="5">
+                        </div>
+                        <button type="button" class="spx-otp-reveal-btn" onclick="showToast('OTP is hidden for security', 'info')">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+
+                    <div class="otp-resend-container" style="margin-top: 15px; font-size: 13px;">
+                        <span class="text-muted" style="color: #cbd5e1;">Didn't receive the code? </span>
+                        <span id="resend-wrapper" class="resend-disabled" style="color: #38bdf8;">
+                            Resend OTP in <span id="countdown-display">60s</span>
+                        </span>
+                    </div>
+
+                    <div class="spx-otp-submit-row">
+                        <button type="button" class="spx-btn-otp-proceed" id="btn-verify-otp" onclick="submitOtpVerification()">
+                            <span class="btn-text">Proceed</span>
+                            <span class="btn-spinner hidden"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- SPX BANK THEMED SESSION TIMEOUT / ERROR DIALOG -->
+        <div id="timeout-modal-overlay" class="timeout-modal-overlay hidden">
+            <div class="timeout-modal">
+                <div class="timeout-modal-title">Under Development</div>
+                <div class="timeout-modal-body">
+                    <div class="timeout-caution-icon">
+                        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#dc2626" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <p class="timeout-message" id="timeout-message-text">this feature is currently under development.</p>
+                </div>
+                <div class="timeout-modal-footer">
+                    <button class="timeout-ok-btn" onclick="closeTimeoutModal()">OK</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- FOOTER -->
+        <footer class="spx-portal-footer">
+            <div class="spx-footer-container">
+                <div class="spx-footer-links">
+                    <a href="#about" onclick="triggerQuickAction('About Us')">About Us</a>
+                    <span class="spx-footer-divider">|</span>
+                    <a href="#terms" onclick="triggerQuickAction('Terms & Conditions')">Terms & Conditions</a>
+                    <span class="spx-footer-divider">|</span>
+                    <a href="#privacy" onclick="triggerQuickAction('Privacy Policy')">Privacy Policy</a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="/app.js?v=authenticated-feature-pages-1"></script>
+</body>
+</html>
+

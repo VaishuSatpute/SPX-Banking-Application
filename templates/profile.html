@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK - My Profile</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+<div class="portal-wrapper">
+    {% include 'components/header.html' %}
+    <main class="spx-portal-body">
+        <div class="profile-page-container">
+            <div class="profile-breadcrumb">Home &nbsp;&gt;&nbsp; My Profile &nbsp;&gt;&nbsp; Personal Details</div>
+            <div class="profile-page-header">
+                <div>
+                    <h1>My Profile</h1>
+                    <p>Manage your personal information and account identification details.</p>
+                </div>
+                <div class="profile-mid-card">
+                    <span>Member Identification No.</span>
+                    <strong id="profile-mid-number">{{ user.mid_number or 'Generating...' }}</strong>
+                </div>
+            </div>
+
+            <div class="profile-layout-grid">
+                <aside class="profile-sidebar">
+                    <div class="profile-avatar-large">{{ user_initials }}</div>
+                    <h2>{{ user.name }}</h2>
+                    <p class="profile-username">@{{ user.username }}</p>
+                    <div class="profile-sidebar-stat"><span>Account No.</span><strong>{{ user.account_number }}</strong></div>
+                    <div class="profile-sidebar-stat"><span>Last Login</span><strong id="profile-last-login">{{ user.last_login_display }}</strong></div>
+                    <div class="profile-sidebar-stat"><span>Status</span><strong class="profile-status-active">{{ user.account_status }}</strong></div>
+                </aside>
+
+                <section class="profile-content-card">
+                    <div class="profile-content-tabs">
+                        <div class="profile-tab active">Personal Details <span class="tab-indicator-badge">!</span></div>
+                        <div class="profile-completion">Profile Completion: <strong id="profile-completion">0%</strong></div>
+                    </div>
+
+                    <div class="profile-kyc-banner">
+                        <div class="kyc-left">Complete your profile to keep your customer information up to date.</div>
+                        <div class="kyc-right"><span id="profile-save-status">Not saved yet</span></div>
+                    </div>
+
+                    <form id="profile-form" class="profile-form-section">
+                        <div class="profile-section-heading">Personal & KYC Information</div>
+                        <div class="profile-form-row">
+                            <div class="form-group"><label class="profile-floating-label">Date of Birth</label><input id="profile-dob" name="date_of_birth" type="date" class="profile-input"></div>
+                            <div class="form-group"><label class="profile-floating-label">Mobile Number</label><input id="profile-mobile" name="mobile_number" type="tel" maxlength="15" class="profile-input" placeholder="Enter mobile number"></div>
+                        </div>
+                        <div class="profile-form-row">
+                            <div class="form-group"><label class="profile-floating-label">PAN</label><input id="profile-pan" name="pan" maxlength="10" class="profile-input" placeholder="ABCDE1234F"></div>
+                            <div class="form-group"><label class="profile-floating-label">Father's Name</label><input id="profile-father" name="father_name" class="profile-input" placeholder="Enter father's name"></div>
+                        </div>
+                        <div class="form-group full-width"><label class="profile-floating-label">Alternate Email ID</label><input id="profile-alt-email" name="alternate_email" type="email" class="profile-input" placeholder="Enter alternate email address"></div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="profile-floating-label">Communication Address</label><textarea id="profile-comm-address" name="communication_address" class="profile-input profile-textarea" placeholder="Enter communication address"></textarea></div>
+                            <div class="form-group"><label class="profile-floating-label">Permanent Address</label><textarea id="profile-perm-address" name="permanent_address" class="profile-input profile-textarea" placeholder="Enter permanent address"></textarea></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group dropdown"><label class="profile-floating-label">Marital Status</label><select id="profile-marital" name="marital_status" class="profile-select"><option value="">Select</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option><option>Separated</option></select></div>
+                            <div class="form-group dropdown"><label class="profile-floating-label">Religion</label><select id="profile-religion" name="religion" class="profile-select"><option value="">Select</option><option>Hindu</option><option>Muslim</option><option>Christian</option><option>Sikh</option><option>Buddhist</option><option>Jain</option><option>Parsi</option><option>Jewish</option><option>Other</option><option>Prefer not to say</option></select></div>
+                        </div>
+                        <div class="form-row half-row">
+                            <div class="form-group dropdown"><label class="profile-floating-label">Category</label><select id="profile-category" name="category" class="profile-select"><option value="">Select</option><option>General</option><option>OBC</option><option>SC</option><option>ST</option><option>EWS</option><option>Other</option><option>Prefer not to say</option></select></div>
+                        </div>
+                        <div class="profile-action-bar" style="position:static; margin-top:28px; padding:0; border:0;">
+                            <button type="button" id="profile-save-btn" class="profile-save-btn" onclick="saveCustomerProfile()">Save Changes</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+

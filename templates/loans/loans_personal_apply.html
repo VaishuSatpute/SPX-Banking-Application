@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Personal Loan</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Stepper UI Styles */
+        .stepper-item {
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 38px; 
+            height: 38px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: 600; 
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .step-label {
+            font-size: 12px; 
+            margin-top: 8px;
+            transition: all 0.3s;
+        }
+
+        /* Default (Inactive) */
+        .stepper-item .step-circle {
+            background: #f1f5f9; 
+            color: #94a3b8; 
+            border: 2px solid transparent;
+        }
+        .stepper-item .step-label {
+            font-weight: 500; 
+            color: #94a3b8; 
+        }
+
+        /* Active */
+        .stepper-item.active .step-circle {
+            background: #5a287d; 
+            color: white; 
+        }
+        .stepper-item.active .step-label {
+            font-weight: 600; 
+            color: #5a287d; 
+        }
+
+        /* Completed */
+        .stepper-item.completed .step-circle {
+            background: #5a287d; 
+            color: white; 
+        }
+        .stepper-item.completed .step-label {
+            font-weight: 600; 
+            color: #5a287d; 
+        }
+
+        .step-line {
+            flex: 1; 
+            height: 2px; 
+            background: #e2e8f0; 
+            margin: 0 10px; 
+            margin-top: -22px;
+            transition: background-color 0.3s;
+        }
+
+        /* Update connecting line if previous step is completed */
+        .stepper-item.completed + .step-line {
+            background: #5a287d;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 20px;
+            color: #1e293b;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        /* Common Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 13px;
+            color: #475569;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #1e293b;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #5a287d;
+        }
+        .form-control:disabled, .form-control[readonly] {
+            background-color: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .btn-action {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #5a287d;
+            color: #fff;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #461f62;
+        }
+        .btn-primary:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+        }
+        .btn-outline:hover {
+            border-color: #5a287d;
+            color: #5a287d;
+        }
+
+        .step-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        /* Step 1 specifics */
+        .otp-group {
+            display: flex;
+            gap: 12px;
+        }
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #10b981;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        /* Step 2 specifics */
+        .doc-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .doc-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .doc-icon {
+            background: #f1f5f9;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+        .doc-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 15px;
+        }
+        .doc-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            color: #64748b;
+        }
+        .btn-icon:hover {
+            border-color: #5a287d;
+            color: #5a287d;
+        }
+
+        /* Step 5 specifics */
+        .success-state {
+            text-align: center;
+            padding: 40px 0;
+        }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #d1fae5;
+            color: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        .success-state h2 {
+            font-size: 24px;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+        .success-state p {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        .reference-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            padding: 16px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        .reference-box strong {
+            color: #0f172a;
+            font-size: 18px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+<div class="portal-wrapper">
+    {% include 'components/header.html' %}
+    <main class="spx-portal-body">
+      
+      <div style="max-width: 880px; width: 90%; margin: 12px auto 0; padding: 0;">
+        <a href="/home/landingPage/loans/personal-loan/" style="color: #5a287d; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Back to Personal Loan
+        </a>
+        
+        <!-- 5-Step Horizontal Stepper Track -->
+        <div style="max-width: 720px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: space-between; position: relative;">
+          <!-- Step 1 -->
+          <div class="stepper-item active" id="ind-step-1">
+            <div class="step-circle">1</div>
+            <span class="step-label">Basic Info</span>
+          </div>
+          <div class="step-line" id="line-step-1"></div>
+
+          <!-- Step 2 -->
+          <div class="stepper-item" id="ind-step-2">
+            <div class="step-circle">2</div>
+            <span class="step-label">Documents</span>
+          </div>
+          <div class="step-line" id="line-step-2"></div>
+
+          <!-- Step 3 -->
+          <div class="stepper-item" id="ind-step-3">
+            <div class="step-circle">3</div>
+            <span class="step-label">Loan Details</span>
+          </div>
+          <div class="step-line" id="line-step-3"></div>
+
+          <!-- Step 4 -->
+          <div class="stepper-item" id="ind-step-4">
+            <div class="step-circle">4</div>
+            <span class="step-label">Preview</span>
+          </div>
+          <div class="step-line" id="line-step-4"></div>
+
+          <!-- Step 5 -->
+          <div class="stepper-item" id="ind-step-5">
+            <div class="step-circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display: none;" id="check-step-5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span id="num-step-5">5</span>
+            </div>
+            <span class="step-label">Status</span>
+          </div>
+        </div>
+
+        <!-- White Form Card -->
+        <div class="step-content-card" style="width: 100%; max-width: 840px; margin: 0 auto; background: white; border-radius: 14px; padding: 24px 32px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+          
+          <!-- STEP 1: Basic Info -->
+          <div class="step-content" id="step-1">
+              <h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px;">Basic Information</h2>
+              <div class="form-group" style="margin-bottom: 14px;">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-control" value="{{ user.first_name or '' }} {{ user.last_name or '' }}" readonly style="width: 100%; height: 42px; font-size: 14px; padding: 0 16px;">
+              </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                  <label class="form-label">Email Address</label>
+                  <div style="display: flex; gap: 16px;">
+                      <input type="text" id="user-email-input" class="form-control" value="{{ user.email or '' }}" readonly style="flex: 1; height: 42px; font-size: 14px; padding: 0 16px;">
+                      <button type="button" onclick="sendLoanOTP()" id="btn-send-otp" style="padding: 0 24px; height: 42px; font-size: 14px; border-radius: 8px; background: #5a287d; color: white; border: none; font-weight: 600; cursor: pointer; white-space: nowrap;">Send OTP</button>
+                  </div>
+              </div>
+              
+              <div class="form-group" id="otp-verification-group" style="display: none; margin-top: 14px; margin-bottom: 14px;">
+                  <label class="form-label">Enter 6-Digit OTP sent to your email</label>
+                  
+                  <div id="otp-section">
+                      <div class="otp-group" style="display: flex; gap: 16px;">
+                          <input type="text" class="form-control" id="mock-otp-input" placeholder="Enter OTP" style="flex: 1; max-width: 280px; height: 42px; font-size: 14px; padding: 0 16px;">
+                          <button type="button" id="btn-verify-otp" style="padding: 0 32px; height: 42px; font-size: 14px; background: #5a287d; color: white; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;" onclick="verifyLoanOTP()">Verify</button>
+                      </div>
+                  </div>
+                  
+                  <div id="otp-success" style="display: none;">
+                      <div class="verified-badge" style="display: inline-flex; align-items: center; gap: 6px; color: #10b981; font-size: 14px; font-weight: 600; margin-top: 8px;">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          Email Verified
+                      </div>
+                  </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                  <button type="button" id="btn-step1-continue" class="btn-action btn-primary" style="padding: 10px 28px; font-size: 14px; font-weight: 600; border-radius: 8px;" onclick="goToStep(2, '/home/landingPage/loans/personal-loan/doc-upload/')" disabled>Continue</button>
+              </div>
+          </div>
+
+          <!-- STEP 2: Document Verification -->
+          <div class="step-content" id="step-2">
+              <h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px;">Document Verification</h2>
+              
+              <div style="background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                      <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Account Number</div>
+                      <strong style="color: #1e293b; font-size: 15px;">{{ user.account_number or '' }}</strong>
+                  </div>
+                  <div class="verified-badge" style="display: inline-flex; align-items: center; gap: 6px; color: #10b981; font-size: 13px; font-weight: 600;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      Verified
+                  </div>
+              </div>
+
+              <p style="font-size: 14px; color: #64748b; margin-bottom: 24px;">Please upload the required documents. Max file size: 5MB.</p>
+              
+              <div class="doc-row">
+                  <div class="doc-info">
+                      <div class="doc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+                      <div class="doc-name">Aadhaar Card</div>
+                  </div>
+                  <div class="doc-actions">
+                      <button class="btn-icon" title="View"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+                      <button class="btn-action btn-outline" style="padding: 6px 12px; font-size: 13px;">Upload</button>
+                  </div>
+              </div>
+              
+              <div class="doc-row">
+                  <div class="doc-info">
+                      <div class="doc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+                      <div class="doc-name">PAN Card</div>
+                  </div>
+                  <div class="doc-actions">
+                      <button class="btn-icon" title="View"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+                      <button class="btn-action btn-outline" style="padding: 6px 12px; font-size: 13px;">Upload</button>
+                  </div>
+              </div>
+
+              <div class="doc-row">
+                  <div class="doc-info">
+                      <div class="doc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
+                      <div class="doc-name">Recent Photograph</div>
+                  </div>
+                  <div class="doc-actions">
+                      <button class="btn-icon" title="View"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+                      <button class="btn-action btn-outline" style="padding: 6px 12px; font-size: 13px;">Upload</button>
+                  </div>
+              </div>
+
+              <div class="step-footer">
+                  <button type="button" class="btn-action btn-primary" onclick="goToStep(3, '/home/landingPage/loans/personal-loan/apply-loan-application/')">Continue</button>
+              </div>
+          </div>
+
+          <!-- STEP 3: Loan Application (Embedded Form) -->
+          <div class="step-content" id="step-3">
+              <div class="spx-loan-card spx-loan-apply-card" style="box-shadow: none; border: none; padding: 0;">
+                <div class="spx-loan-card-heading" style="padding-bottom: 20px;"><div><h2>Loan Details</h2><p>Provide your financial requirements and we will calculate your estimated EMI.</p></div></div>
+                <form id="loan-application-form" onsubmit="mockSubmitLoanDetails(event)">
+                  <div class="spx-loan-form-grid">
+                    <label>Loan Type<select id="loan-type" onchange="updateLoanRate()"><option value="PERSONAL" selected>Personal Loan</option></select></label>
+                    <label>Loan Amount (₹)<input id="loan-amount" type="text" placeholder="Max ₹1,00,00,000" oninput="formatLoanAmount(this)" required></label>
+                    <label>Tenure (months)<select id="loan-tenure" onchange="calculateLoanPreview()"><option value="12">12 months</option><option value="24">24 months</option><option value="36">36 months</option><option value="48">48 months</option><option value="60" selected>60 months</option></select></label>
+                    <label>Employment Type<select id="loan-employment" required><option value="">Select</option><option>Salaried</option><option>Self Employed</option><option>Business Owner</option><option>Professional</option></select></label>
+                    <label>Monthly Income (₹)<input id="loan-income" type="text" placeholder="Enter Monthly Income" oninput="formatMonthlyIncome(this)" required></label>
+                    <label class="spx-loan-full">Purpose / Reason<textarea id="loan-purpose" rows="3" placeholder="Tell us briefly why you need the loan"></textarea></label>
+                  </div>
+                  <div id="loan-calculator-preview" style="margin-top: 16px;">
+                      <div style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: #f8fafc; border-radius: 8px;">
+                          <div style="font-size: 13px; color: #64748b;">Estimated Monthly EMI</div>
+                          <strong style="color: #5a287d; font-size: 24px;">Enter amount to calculate</strong>
+                          <div style="font-size: 13px; color: #10b981; font-weight: 500;">Interest rate starting at 12.50% p.a.</div>
+                      </div>
+                  </div>
+                  
+                  <div class="step-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid #f1f5f9;">
+                      <button type="button" class="btn-action btn-outline" id="btn-back-step2" onclick="goToStep(2, '/home/landingPage/loans/personal-loan/doc-upload/')" style="padding: 10px 24px; font-size: 14px;">&larr; Back to Documents</button>
+                      <div style="display: flex; gap: 12px;">
+                          <button type="button" class="btn-action btn-outline" id="btn-calc-emi" onclick="calculateLoanPreview(true)" style="padding: 10px 24px; font-size: 14px;">Calculate EMI</button>
+                          <button type="submit" class="btn-action btn-primary" id="btn-continue-step4" style="padding: 10px 28px; font-size: 14px; font-weight: 600; border-radius: 8px;">Continue to Preview &rarr;</button>
+                      </div>
+                  </div>
+                </form>
+              </div>
+          </div>
+
+          <!-- STEP 4: Preview Application -->
+          <div class="step-content" id="step-4">
+              <h2 class="step-title" style="margin-bottom: 24px;">Preview Application</h2>
+              <div id="loan-review-content" style="margin-bottom: 24px;">
+                  <!-- Dynamically populated via JS -->
+                  <p style="color: #64748b; text-align: center;">Loading preview...</p>
+              </div>
+              
+              <label style="display: flex; gap: 12px; font-size: 14px; color: #1e293b; align-items: flex-start; margin-bottom: 24px; cursor: pointer; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                  <input type="checkbox" id="loan-declare-check" style="width: 18px; height: 18px; accent-color: #5a287d; margin-top: 2px;" onchange="document.getElementById('btn-submit-final').disabled = !this.checked">
+                  <span>I declare that all the information provided is true and accurate. I authorize SPX Bank to verify my credit profile.</span>
+              </label>
+              
+              <div class="step-footer" style="display: flex; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 24px;">
+                  <button type="button" class="btn-action btn-outline" id="btn-back-step3" onclick="goToStep(3, '/home/landingPage/loans/personal-loan/apply-loan-application/')" style="padding: 10px 24px; font-size: 14px;">&larr; Back to Edit</button>
+                  <button type="button" class="btn-action btn-primary" id="btn-submit-final" onclick="mockFinalSubmit()" disabled style="padding: 10px 28px; font-size: 14px; font-weight: 600; border-radius: 8px;">Submit Application</button>
+              </div>
+          </div>
+
+          <!-- STEP 5: Success -->
+          <div class="step-content" id="step-5">
+              <div class="success-state">
+                  <div class="success-icon">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </div>
+                  <h2>Application Submitted Successfully</h2>
+                  <p>Your Personal Loan application is under admin review. We will notify you once approved.</p>
+                  
+                  <div class="reference-box">
+                      <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Application Reference ID</div>
+                      <strong id="success-ref-id">LN-0000</strong>
+                  </div>
+                  
+                  <div style="margin-top: 10px;">
+                      <a href="/home/landingPage/loans/manage" class="btn-action btn-primary" style="text-decoration: none;">Go to Dashboard</a>
+                  </div>
+              </div>
+          </div>
+
+        </div> <!-- End of Form Card -->
+      </div>
+    </main>
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script>
+    // Local JS Routing and Stepper Logic
+    
+    const steps = 5;
+    
+    // Map URL patterns to step numbers
+    const routeMap = [
+        { path: 'apply', step: 1 },
+        { path: 'basicinfo', step: 1 },
+        { path: 'doc-upload', step: 2 },
+        { path: 'apply-loan-application', step: 3 },
+        { path: 'preview-loan-application', step: 4 },
+        { path: 'application-submit-status', step: 5 }
+    ];
+
+    function determineStepFromURL() {
+        const path = window.location.pathname;
+        let matchedStep = 1;
+        for (let r of routeMap) {
+            if (path.includes(r.path)) {
+                matchedStep = r.step;
+            }
+        }
+        return matchedStep;
+    }
+
+    function updateStepperUI(currentStep) {
+        // Update Indicators & Lines
+        for (let i = 1; i <= steps; i++) {
+            const ind = document.getElementById('ind-step-' + i);
+            if (ind) {
+                if (i < currentStep) {
+                    ind.className = 'stepper-item completed';
+                } else if (i === currentStep) {
+                    ind.className = 'stepper-item active';
+                } else {
+                    ind.className = 'stepper-item';
+                }
+            }
+            
+            // Checkmark logic for completed steps
+            const circle = ind ? ind.querySelector('.step-circle') : null;
+            if (circle) {
+                if (i < currentStep || (i === 5 && currentStep === 5)) {
+                    circle.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                } else {
+                    circle.innerHTML = i;
+                }
+            }
+            
+            // Show/Hide Content
+            const content = document.getElementById('step-' + i);
+            if (content) {
+                if (i === currentStep) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            }
+        }
+    }
+
+    function goToStep(stepNumber, url) {
+        if (url) {
+            history.pushState(null, '', url);
+        }
+        updateStepperUI(stepNumber);
+    }
+
+    // Handle Browser Back/Forward
+    window.addEventListener('popstate', () => {
+        const step = determineStepFromURL();
+        updateStepperUI(step);
+    });
+
+    // Initialize on Load
+    document.addEventListener('DOMContentLoaded', () => {
+        const initialStep = determineStepFromURL();
+        // Force URL to match step 1 if generic apply/ route
+        if (window.location.pathname.endsWith('/apply/')) {
+             history.replaceState(null, '', '/home/landingPage/loans/personal-loan/basicinfo/email-verify/');
+        }
+        updateStepperUI(initialStep);
+    });
+
+    // Real Step 1 Verification
+    async function sendLoanOTP() {
+        const btn = document.getElementById('btn-send-otp');
+        btn.textContent = 'Sending...';
+        btn.disabled = true;
+
+        try {
+            const r = await fetch('/api/loans/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+            });
+            const d = await r.json();
+            if (d.status === 'success') {
+                btn.textContent = 'OTP Sent';
+                btn.style.background = '#10b981';
+                document.getElementById('otp-verification-group').style.display = 'block';
+            } else {
+                alert(d.message || 'Failed to send OTP.');
+                btn.textContent = 'Send OTP';
+                btn.disabled = false;
+            }
+        } catch (e) {
+            alert('Server error.');
+            btn.textContent = 'Send OTP';
+            btn.disabled = false;
+        }
+    }
+
+    async function verifyLoanOTP() {
+        const input = document.getElementById('mock-otp-input').value;
+        if (input.length < 6) { 
+            alert('Please enter a valid 6-digit OTP code.');
+            return;
+        }
+        
+        const btn = document.getElementById('btn-verify-otp');
+        const oldText = btn.textContent;
+        btn.textContent = 'Verifying...';
+        btn.disabled = true;
+
+        try {
+            const r = await fetch('/api/loans/verify-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ otp: input })
+            });
+            const d = await r.json();
+            if (d.status === 'success') {
+                document.getElementById('otp-section').style.display = 'none';
+                document.getElementById('otp-success').style.display = 'block';
+                document.getElementById('btn-step1-continue').disabled = false;
+            } else {
+                alert(d.message || 'Invalid OTP.');
+                btn.textContent = oldText;
+                btn.disabled = false;
+            }
+        } catch(e) {
+            alert('Server error.');
+            btn.textContent = oldText;
+            btn.disabled = false;
+        }
+    }
+
+    // Step 3 to Step 4 logic
+    async function mockSubmitLoanDetails(e) {
+        e.preventDefault();
+        
+        const data = getLoanFormData();
+        if(data.amount < 10000) { showToast('Loan amount must be at least ₹10,000.', 'error'); return; }
+        
+        // Fetch real EMI details to show in preview
+        let emiData = { emi: 0, interest_rate: 12.5, total_interest: 0, total_payable: 0 };
+        try {
+            const r = await fetch('/api/loans/calculate',{
+                method:'POST',
+                credentials:'include',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify(data)
+            });
+            const d = await r.json();
+            if (d.success) emiData = d;
+        } catch (err) { console.error('EMI calculation failed for preview'); }
+
+        const userName = `{{ user.full_name or user.name or '' }}`;
+        const userEmail = `{{ user.email or '' }}`;
+        const userAccount = `{{ account_number or '' }}`;
+
+        const previewHTML = `
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Section A: Applicant Profile -->
+                <div style="background: white; border-radius: 8px; border: 1px solid #e2e8f0; padding: 16px;">
+                    <h3 style="font-size: 15px; color: #1e293b; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">A. Applicant Profile</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 14px;">
+                        <div><span style="color: #64748b;">Full Name:</span> <strong style="color: #1e293b;">${userName}</strong></div>
+                        <div><span style="color: #64748b;">Email Address:</span> <strong style="color: #1e293b;">${userEmail}</strong></div>
+                        <div><span style="color: #64748b;">Linked Account:</span> <strong style="color: #1e293b;">${userAccount}</strong></div>
+                        <div><span style="color: #64748b;">Employment Type:</span> <strong style="color: #1e293b;">${data.employment_type}</strong></div>
+                    </div>
+                </div>
+
+                <!-- Section B: Loan & Repayment Summary -->
+                <div style="background: white; border-radius: 8px; border: 1px solid #e2e8f0; padding: 16px;">
+                    <h3 style="font-size: 15px; color: #1e293b; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">B. Loan & Repayment Summary</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 14px; margin-bottom: 16px;">
+                        <div><span style="color: #64748b;">Loan Amount:</span> <strong style="color: #1e293b;">₹${data.amount.toLocaleString('en-IN')}</strong></div>
+                        <div><span style="color: #64748b;">Tenure:</span> <strong style="color: #1e293b;">${data.tenure_months} Months</strong></div>
+                        <div><span style="color: #64748b;">Interest Rate:</span> <strong style="color: #1e293b;">${emiData.interest_rate.toFixed(2)}% p.a.</strong></div>
+                        <div style="grid-column: span 2;"><span style="color: #64748b;">Purpose / Reason:</span> <strong style="color: #1e293b;">${data.purpose || 'Not specified'}</strong></div>
+                    </div>
+                    
+                    <div style="background: #f8fafc; padding: 16px; border-radius: 8px;">
+                        <div style="font-size: 13px; color: #64748b;">Estimated Monthly EMI</div>
+                        <strong style="color: #5a287d; font-size: 24px; display: block; margin-bottom: 8px;">₹${emiData.emi.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})} / month</strong>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; color: #475569; margin-top: 8px; border-top: 1px solid #e2e8f0; padding-top: 8px;">
+                            <span>Total Interest: <strong style="color: #1e293b;">₹${emiData.total_interest.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong></span>
+                            <span>Total Payable: <strong style="color: #1e293b;">₹${emiData.total_payable.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section C: Verified Documents -->
+                <div style="background: white; border-radius: 8px; border: 1px solid #e2e8f0; padding: 16px;">
+                    <h3 style="font-size: 15px; color: #1e293b; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">C. Verified Documents</h3>
+                    <div style="display: flex; gap: 12px; font-size: 13px; color: #10b981; font-weight: 500;">
+                        <span style="background: #d1fae5; padding: 6px 12px; border-radius: 4px;">✓ Identity Proof (Aadhaar/PAN)</span>
+                        <span style="background: #d1fae5; padding: 6px 12px; border-radius: 4px;">✓ Signature & Photo Verified</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById('loan-review-content').innerHTML = previewHTML;
+        
+        // Reset checkbox on entry
+        const cb = document.getElementById('loan-declare-check');
+        if(cb){ cb.checked = false; document.getElementById('btn-submit-final').disabled = true; }
+        
+        // We set global so final submit works
+        window.tempLoanData = data; 
+        
+        goToStep(4, '/home/landingPage/loans/personal-loan/preview-loan-application/');
+    }
+
+    async function mockFinalSubmit() {
+        if (!window.tempLoanData) return;
+        
+        // Actual API call
+        try {
+            const r = await fetch('/api/loans/apply', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(window.tempLoanData)
+            });
+            const d = await r.json();
+            if(!d.success) {
+                showToast(d.message || 'Loan application failed.', 'error');
+                return;
+            }
+            
+            document.getElementById('success-ref-id').textContent = d.reference_id;
+            goToStep(5, '/home/landingPage/loans/personal-loan/application-submit-status/');
+            
+        } catch(e) {
+            showToast('Submission error', 'error');
+        }
+    }
+</script>
+</body>
+</html>
+

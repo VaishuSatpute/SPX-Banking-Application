@@ -1,0 +1,125 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  /* Wrapper and Layout Resets */
+  body {
+    margin: 0 !important;
+    overflow-x: hidden !important;
+  }
+  .admin-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100vw !important;
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+  }
+  .admin-main {
+    margin-left: 260px !important;
+    width: calc(100vw - 260px) !important;
+    flex-grow: 1 !important;
+    min-width: 0 !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Sidebar Strict Dimensions - FIXED TO VIEWPORT */
+  .admin-sidebar {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+    flex-shrink: 0 !important;
+    height: 100vh !important;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #1a0b2e !important;
+    overflow-y: auto;
+    z-index: 1000 !important;
+  }
+  
+  /* Sidebar Navigation Items - ANTI-JITTER */
+  .admin-nav-item {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    border: none !important;
+    border-left: 3px solid transparent !important;
+    display: flex !important;
+    align-items: center !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-weight: 600 !important; /* Lock weight so text doesn't shift */
+    text-decoration: none !important;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .admin-nav-item:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #ffffff !important;
+  }
+  .admin-nav-item.active {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-left: 3px solid #a78bfa !important;
+    color: #ffffff !important;
+  }
+  .admin-nav-item i {
+    width: 20px !important;
+    text-align: center !important;
+  }
+</style>
+<aside class="admin-sidebar">
+    <div class="admin-sidebar-header">
+        <div class="admin-logo-badge">SPX</div>
+        <div>
+            <div class="admin-brand-title">SPX BANK</div>
+            <div class="admin-brand-subtitle">Master Control</div>
+        </div>
+    </div>
+
+    <nav class="admin-nav-menu">
+        <div class="admin-nav-section-label">Operations</div>
+        
+        <a href="/admin/dashboard" class="admin-nav-item {% if request.path == '/admin/dashboard' %}active{% endif %}">
+            <i class="fas fa-th-large fa-fw me-2"></i> Dashboard Overview
+        </a>
+
+        <a href="/admin/users" class="admin-nav-item {% if request.path == '/admin/users' or request.path.startswith('/admin/users/') %}active{% endif %}">
+            <i class="fas fa-users fa-fw me-2"></i> User Accounts
+        </a>
+
+        <a href="/admin/loans" class="admin-nav-item {% if request.path == '/admin/loans' %}active{% endif %}">
+            <i class="fas fa-file-invoice-dollar fa-fw me-2"></i> Loan Applications
+        </a>
+
+        <a href="/admin/cards" class="admin-nav-item {% if request.path == '/admin/cards' %}active{% endif %}">
+            <i class="fas fa-credit-card fa-fw me-2"></i> Cards & Requests
+        </a>
+
+        <a href="/admin/transactions" class="admin-nav-item {% if request.path == '/admin/transactions' %}active{% endif %}">
+            <i class="fas fa-exchange-alt fa-fw me-2"></i> Transaction Log
+        </a>
+
+        <div class="admin-nav-section-label">Security & Audit</div>
+
+        <a href="/admin/audit-logs" class="admin-nav-item {% if request.path == '/admin/audit-logs' %}active{% endif %}">
+            <i class="fas fa-shield-alt fa-fw me-2"></i> Master Audit Logs
+        </a>
+    </nav>
+
+    <div class="admin-sidebar-footer p-3 border-top border-secondary border-opacity-25 mt-auto">
+      <div class="d-flex align-items-center gap-2">
+        <div class="rounded-circle d-flex align-items-center justify-content-center shadow-sm" 
+             style="width: 38px; height: 38px; min-width: 38px; background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); border: 1px solid rgba(255, 255, 255, 0.2);">
+          <i class="fas fa-user-shield text-white fs-6"></i>
+        </div>
+        <div class="d-flex flex-column overflow-hidden">
+          <span class="text-white fw-bold small text-truncate">Master Admin</span>
+          <span class="text-white-50 text-uppercase font-monospace" style="font-size: 10px; letter-spacing: 0.5px;">SYSTEM CONTROL</span>
+        </div>
+      </div>
+    </div>
+</aside>
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK — User Accounts Management</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        
+        <!-- SIDEBAR -->
+        {% include 'admin_sidebar.html' %}
+
+        <!-- MAIN CONTAINER -->
+        <main class="admin-main">
+            
+            <header class="admin-topbar">
+                <div class="admin-topbar-title-group">
+                    <h1 class="admin-page-title">User Accounts Management</h1>
+                    <span class="admin-badge-master">ALL CUSTOMERS</span>
+                </div>
+
+                <div class="admin-topbar-actions">
+                    <button onclick="handleAdminLogout()" class="admin-logout-btn">Logout</button>
+                </div>
+            </header>
+
+            <div class="admin-content">
+                
+                <div class="admin-card-table">
+                    <div class="table-header-toolbar">
+                        <div class="table-title">Customer Bank Accounts</div>
+                        
+                        <div class="table-filter-group">
+                            <input type="text" id="search-users-input" class="admin-search-input" placeholder="Search name, email, 12-digit account number, MID..." onkeyup="filterUsersTable()">
+                            
+                            <select id="filter-users-status" class="admin-select-filter" onchange="filterUsersTable()">
+                                <option value="">All Statuses</option>
+                                <option value="ACTIVE">Active</option>
+                                <option value="LOCKED">Locked</option>
+                                <option value="SUSPENDED">Suspended</option>
+                                <option value="INACTIVE">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>User ID / MID</th>
+                                    <th>Customer Info</th>
+                                    <th>Account Number</th>
+                                    <th>Simulated Balance</th>
+                                    <th>Status</th>
+                                    <th>Joined Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <tr><td colspan="7" style="text-align: center; padding: 25px; color: var(--admin-text-muted);">Fetching customer accounts...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>
+
+

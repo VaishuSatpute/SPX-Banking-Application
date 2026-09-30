@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Money - SPX BANK</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+<div class="portal-wrapper">
+    {% include 'components/header.html' %}
+    <div class="yono-sm-page-container">
+        <a href="/home/landingPage/manageRelationship/transactionAccounts" class="yono-sm-back-link">&lt; Back to Accounts</a>
+        <h2 class="yono-sm-header">Send Money</h2>
+        <div class="yono-sm-stepper">
+            <div id="send-step-1" class="yono-sm-step active"><div class="yono-sm-step-circle">1</div><div class="yono-sm-step-label">Enter Details</div></div>
+            <div class="yono-sm-step-line"></div>
+            <div id="send-step-2" class="yono-sm-step"><div class="yono-sm-step-circle">2</div><div class="yono-sm-step-label">Review</div></div>
+            <div class="yono-sm-step-line"></div>
+            <div id="send-step-3" class="yono-sm-step"><div class="yono-sm-step-circle">3</div><div class="yono-sm-step-label">Receipt</div></div>
+        </div>
+
+        <div id="send-entry-view" class="yono-sm-content-grid">
+            <div class="yono-sm-form-container">
+                <h3 class="yono-sm-section-title">Beneficiary Details</h3>
+                <div class="yono-sm-form-row">
+                    <div class="yono-sm-form-group"><label>Account Number</label><input id="send-account" type="text" inputmode="numeric" maxlength="12" pattern="\d{12}" placeholder="Enter 12-digit Account Number"></div>
+                    <div class="yono-sm-form-group"><label>Confirm Account Number</label><input id="send-account-confirm" type="text" inputmode="numeric" maxlength="12" pattern="\d{12}" placeholder="Re-enter 12-digit Account Number"></div>
+                </div>
+                <div class="yono-sm-form-row">
+                    <div class="yono-sm-form-group" style="flex:1"><label>Account Name</label><div class="yono-sm-input-with-btn"><input id="send-recipient-name" type="text" readonly placeholder="Name will appear after verification"><button type="button" id="send-verify-btn" class="yono-sm-verify-btn" onclick="verifySendBeneficiary()">Verify</button></div><div id="send-recipient-verified" class="yono-recipient-verified">✓ Recipient verified</div></div>
+                </div>
+                <div class="yono-sm-form-row">
+                    <div class="yono-sm-form-group" style="max-width:50%"><label>Amount (₹)</label><input id="send-amount" type="number" min="1000" step="0.01" placeholder="Minimum ₹1,000" onwheel="this.blur()"></div>
+                </div>
+                <div class="yono-sm-form-row"><div class="yono-sm-form-group"><label>Note (Optional)</label><input id="send-note" type="text" maxlength="255" placeholder="Reason / note for this transfer"></div></div>
+                <div id="send-error" class="send-money-error"></div>
+            </div>
+            <div class="yono-sm-side-container">
+                <div><h3 class="yono-sm-section-title">Choose account to pay with</h3><div class="yono-sm-account-card"><div class="yono-sm-acc-number">{{ account_number }}</div><div class="yono-sm-acc-type">Savings Account</div><div class="yono-sm-acc-balance">Available Balance: ₹{{ balance }}</div></div></div>
+                <div class="yono-sm-actions"><button type="button" class="yono-sm-btn-cancel" onclick="window.location.href='/home/landingPage/manageRelationship/transactionAccounts'">Cancel</button><button type="button" id="send-proceed-btn" class="yono-sm-btn-proceed" onclick="prepareTransferReview()">Proceed</button></div>
+            </div>
+        </div>
+
+        <div id="send-review-view" class="yono-review-panel">
+            <div class="receipt-box">
+                <h3>Review Transfer</h3>
+                <p>Please confirm the details before processing the transfer.</p>
+                <div class="receipt-grid">
+                    <span>From Account</span><strong id="review-from-account">{{ account_number }}</strong>
+                    <span>Recipient</span><strong id="review-recipient">-</strong>
+                    <span>Recipient Account</span><strong id="review-recipient-account">-</strong>
+                    <span>Amount</span><strong id="review-amount">₹0.00</strong>
+                    <span>Note</span><strong id="review-note">-</strong>
+                </div>
+                <div class="yono-sm-actions" style="margin-top:25px"><button type="button" class="yono-sm-btn-cancel" onclick="backToTransferEdit()">Back & Edit</button><button type="button" class="yono-sm-btn-proceed" onclick="processTransfer()">Send Money</button></div>
+            </div>
+        </div>
+
+        <div id="send-receipt-view" class="yono-review-panel">
+            <div class="receipt-box">
+                <h3>Transfer Successful</h3><p>Your e-receipt is ready.</p>
+                <div class="receipt-grid">
+                    <span>Reference ID</span><strong id="receipt-reference">-</strong>
+                    <span>Date & Time</span><strong id="receipt-date">-</strong>
+                    <span>Sent To</span><strong id="receipt-recipient">-</strong>
+                    <span>Amount</span><strong id="receipt-amount">-</strong>
+                    <span>Remaining Balance</span><strong id="receipt-balance">-</strong>
+                    <span>Status</span><strong>COMPLETED</strong>
+                </div>
+                <div class="yono-sm-actions" style="margin-top:25px"><button type="button" class="yono-sm-btn-cancel" onclick="window.location.href='/home/landingPage/manageRelationship/transactionAccounts'">Back to Accounts</button><button type="button" class="yono-sm-btn-proceed" onclick="window.print()">Print E-Receipt</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+

@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Personal Loan</title>
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css?v=original-loans-1">
+    <style>
+        /* Stepper UI Styles */
+        .stepper-item {
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 38px; 
+            height: 38px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: 600; 
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .step-label {
+            font-size: 12px; 
+            margin-top: 8px;
+            transition: all 0.3s;
+        }
+
+        /* Default (Inactive) */
+        .stepper-item .step-circle {
+            background: #f1f5f9; 
+            color: #94a3b8; 
+            border: 2px solid transparent;
+        }
+        .stepper-item .step-label {
+            font-weight: 500; 
+            color: #94a3b8; 
+        }
+
+        /* Active */
+        .stepper-item.active .step-circle {
+            background: #5a287d; 
+            color: white; 
+        }
+        .stepper-item.active .step-label {
+            font-weight: 600; 
+            color: #5a287d; 
+        }
+
+        /* Completed */
+        .stepper-item.completed .step-circle {
+            background: #5a287d; 
+            color: white; 
+        }
+        .stepper-item.completed .step-label {
+            font-weight: 600; 
+            color: #5a287d; 
+        }
+
+        .step-line {
+            flex: 1; 
+            height: 2px; 
+            background: #e2e8f0; 
+            margin: 0 10px; 
+            margin-top: -22px;
+            transition: background-color 0.3s;
+        }
+
+        /* Update connecting line if previous step is completed */
+        .stepper-item.completed + .step-line {
+            background: #5a287d;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 20px;
+            color: #1e293b;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+
+        /* Common Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 13px;
+            color: #475569;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #1e293b;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #5a287d;
+        }
+        .form-control:disabled, .form-control[readonly] {
+            background-color: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .btn-action {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #5a287d;
+            color: #fff;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #461f62;
+        }
+        .btn-primary:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+        }
+        .btn-outline:hover {
+            border-color: #5a287d;
+            color: #5a287d;
+        }
+
+        .step-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        /* Step 1 specifics */
+        .otp-group {
+            display: flex;
+            gap: 12px;
+        }
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #10b981;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        /* Step 2 specifics */
+        .doc-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .doc-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .doc-icon {
+            background: #f1f5f9;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+        .doc-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 15px;
+        }
+        .doc-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            color: #64748b;
+        }
+        .btn-icon:hover {
+            border-color: #5a287d;
+            color: #5a287d;
+        }
+
+        /* Step 5 specifics */
+        .success-state {
+            text-align: center;
+            padding: 40px 0;
+        }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #d1fae5;
+            color: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        .success-state h2 {
+            font-size: 24px;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+        .success-state p {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        .reference-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            padding: 16px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        .reference-box strong {
+            color: #0f172a;
+            font-size: 18px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+<div class="portal-wrapper">
+            <!-- SPX BANK TOP NAVIGATION STRIP -->
+        <div class="spx-top-nav">
+            <div class="spx-top-nav-container">
+                <div class="spx-top-nav-left">
+                    <span class="spx-top-tab">Banking</span>
+                </div>
+                <div class="spx-top-nav-right">
+                    <a href="#" class="spx-top-link spx-icon-link" onclick="triggerQuickAction('Get Help')">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Get Help
+                    </a>
+                    <a href="tel:1800111101" class="spx-top-link spx-icon-link">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        1800-11-1101
+                    </a>
+                    <div class="spx-top-link spx-lang-selector">
+                        English
+                        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-font-btn">A-</button>
+                    <button class="spx-font-btn">A</button>
+                    <button class="spx-font-btn">A+</button>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN BRANDING HEADER -->
+        <header class="spx-main-header">
+            <div class="spx-header-container">
+                <div class="spx-logo-block" onclick="window.location.href='/'">
+                    <span class="spx-text">SPX BANK</span>
+                    <span class="net-banking-tag">NET-BANKING</span>
+                </div>
+
+                <!-- NAVIGATION MENU (logged-in state) -->
+                <nav class="spx-main-nav">
+                    <div class="spx-nav-menu logged-in-menu">
+                        <a href="/home/landingPage/homePage" class="spx-nav-item">Overview</a>
+                        <a href="/home/landingPage/manageRelationship/transactionAccounts" class="spx-nav-item">Accounts</a>
+                        <a id="nav-payments-tab" class="spx-nav-item" href="#">Payments</a>
+                        <a id="nav-deposits-tab" class="spx-nav-item" href="#">Deposits</a>
+                        <a id="nav-loans-tab" class="spx-nav-item" href="#">Loans</a>
+                        <a id="nav-cards-tab" class="spx-nav-item" href="#">Cards</a>
+                        <a id="nav-investments-tab" class="spx-nav-item" href="#">Investments</a>
+                        <a id="nav-insurance-tab" class="spx-nav-item" href="#">Insurance</a>
+                        <a id="nav-services-tab" class="spx-nav-item" href="#">Services</a>
+                        <div id="services-mega-menu" class="spx-services-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Quick Services -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Services</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Account Related')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><polygon points="12 2 2 7 22 7"></polygon><polyline points="2 17 2 22 22 22 22 17"></polyline><line x1="6" y1="17" x2="6" y2="7"></line><line x1="10" y1="17" x2="10" y2="7"></line><line x1="14" y1="17" x2="14" y2="7"></line><line x1="18" y1="17" x2="18" y2="7"></line></svg>
+                    <span>Account Related</span>
+                </li>
+                <li onclick="triggerQuickAction('Pension Related')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                    <span>Pension Related</span>
+                </li>
+                <li onclick="triggerQuickAction('Tax Related')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Tax Related</span>
+                </li>
+                <li onclick="triggerQuickAction('Cheque Services')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Cheque Services</span>
+                </li>
+                <li onclick="triggerQuickAction('Doorstep Banking')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Doorstep Banking</span>
+                </li>
+                <li onclick="triggerQuickAction('Positive Pay System')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Positive Pay System</span>
+                </li>
+                <li onclick="triggerQuickAction('Apply/Manage FASTag')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><circle cx="7" cy="7" r="1.5"></circle></svg>
+                    <span>Apply/Manage FASTag</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Nominee')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Manage Nominee</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage My Profile')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Manage My Profile</span>
+                </li>
+                <li onclick="triggerQuickAction('e-Secure Lock')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>e-Secure Lock</span>
+                </li>
+                <li onclick="triggerQuickAction('Stop Cheque')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Stop Cheque</span>
+                </li>
+                <li onclick="triggerQuickAction('Update My Security')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Update My Security</span>
+                </li>
+                <li onclick="triggerQuickAction('Report Unauthorized Transactions')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span>Report- Unauthorized Transactions</span>
+                </li>
+                <li onclick="triggerQuickAction('Security Question')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Security Question</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                    </div>
+                </nav>
+
+                <div id="mega-menu-overlay" class="spx-mega-overlay"></div>
+<div id="payments-mega-menu" class="spx-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Fund Transfer</h5>
+            <ul class="spx-mega-list">
+                <a href="/home/landingPage/profilePage/send-money/fund-transfer" style="text-decoration: none; color: inherit; display: contents;">
+                    <li>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        <span>Send Money</span>
+                    </li>
+                </a>
+                <li onclick="triggerQuickAction('Bill Payments')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+                    <span>Bill Payments</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <a href="/home/landingPage/manageRelationship/transactionAccounts" style="text-decoration: none; color: inherit; display: contents;">
+                    <li>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <span>Transaction History</span>
+                    </li>
+                </a>
+                <li onclick="triggerQuickAction('Manage Limits')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Manage Limits</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="deposits-mega-menu" class="spx-deposits-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Fixed Deposit')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    <span>Fixed Deposit</span>
+                </li>
+                <li onclick="triggerQuickAction('Recurring Deposit')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    <span>Recurring Deposit</span>
+                </li>
+                <li onclick="triggerQuickAction('Annuity Deposit')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <span>Annuity Deposit</span>
+                </li>
+                <li onclick="triggerQuickAction('Auto Sweep')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path><path d="M12 8l4 4-4 4"></path></svg>
+                    <span>Auto Sweep</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Deposits')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>Manage Deposits</span>
+                </li>
+                <li onclick="triggerQuickAction('View Interest Rate')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+                    <span>View Interest Rate</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage PPF Accounts')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                    <span>Manage PPF Accounts</span>
+                </li>
+                <li onclick="triggerQuickAction('Deposit Requests')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>Requests</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="loans-mega-menu" class="spx-loans-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Products -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Personal Loan')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Personal Loan</span>
+                </li>
+
+                <li style="cursor: default; opacity: 0.65; pointer-events: none; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span>Home Loan</span>
+                    </div>
+                    <span class="badge bg-light text-muted" style="font-size: 10px;">Soon</span>
+                </li>
+
+                <li style="cursor: default; opacity: 0.65; pointer-events: none; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                        <span>Education Loan</span>
+                    </div>
+                    <span class="badge bg-light text-muted" style="font-size: 10px;">Soon</span>
+                </li>
+                
+                <li style="cursor: default; opacity: 0.65; pointer-events: none; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                        <span>Gold Loan</span>
+                    </div>
+                    <span class="badge bg-light text-muted" style="font-size: 10px;">Soon</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+
+                <li onclick="triggerQuickAction('Manage Loans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    <span>Manage Loans</span>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="cards-mega-menu" class="spx-cards-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Products -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Credit Cards')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Credit Cards</span>
+                </li>
+                <li onclick="triggerQuickAction('Debit Cards')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    <span>Debit Cards</span>
+                </li>
+
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Credit Card')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Manage Credit Card</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage Debit Card')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    <span>Manage Debit Card</span>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="investments-mega-menu" class="spx-investments-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Products -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Mutual Funds')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M7 20h10"></path><path d="M10 20c5.5-5.5.5-16 .5-16"></path><path d="M10.5 4.5c2.5 2.5 2.5 7 0 9.5"></path></svg>
+                    <span>Mutual Funds</span>
+                </li>
+                <li onclick="triggerQuickAction('NPS')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 12A10 10 0 0 0 2 12h20Z"></path><path d="M12 12v8a2 2 0 0 0 4 0"></path></svg>
+                    <span>NPS</span>
+                </li>
+                <li onclick="triggerQuickAction('PPF')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M8 21h8a4 4 0 0 0 4-4v-3a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v3a4 4 0 0 0 4 4z"></path><circle cx="12" cy="15" r="2"></circle><path d="M10 10s1.5-4 2-4 2 4 2 4"></path></svg>
+                    <span>PPF</span>
+                </li>
+                <li onclick="triggerQuickAction('IPO')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>IPO</span>
+                </li>
+                <li onclick="triggerQuickAction('Demat & Securities')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    <span>Demat & Securities</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Mutual Fund')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M7 20h10"></path><path d="M10 20c5.5-5.5.5-16 .5-16"></path><path d="M10.5 4.5c2.5 2.5 2.5 7 0 9.5"></path></svg>
+                    <span>Manage Mutual Fund</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage NPS Account')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 12A10 10 0 0 0 2 12h20Z"></path><path d="M12 12v8a2 2 0 0 0 4 0"></path></svg>
+                    <span>Manage NPS Account</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage PPF')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M8 21h8a4 4 0 0 0 4-4v-3a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v3a4 4 0 0 0 4 4z"></path><circle cx="12" cy="15" r="2"></circle><path d="M10 10s1.5-4 2-4 2 4 2 4"></path></svg>
+                    <span>Manage PPF</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="insurance-mega-menu" class="spx-insurance-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- COLUMN 1: Life Insurance -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Life Insurance</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Protection Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Protection Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Child Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="8" r="5"></circle><path d="M18 20c0-3.3-4-6-6-6s-6 2.7-6 6"></path></svg>
+                    <span>Child Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Retirement Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 12A10 10 0 0 0 2 12h20Z"></path><path d="M12 12v8a2 2 0 0 0 4 0"></path></svg>
+                    <span>Retirement Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Wealth Creation')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>Wealth Creation</span>
+                </li>
+                <li onclick="triggerQuickAction('Savings Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"></path></svg>
+                    <span>Savings Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Group Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Group Plans</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- COLUMN 2: General Insurance -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">General Insurance</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Health Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path></svg>
+                    <span>Health Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Motor Insurance')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg>
+                    <span>Motor Insurance</span>
+                </li>
+                <li onclick="triggerQuickAction('Travel Insurance')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="6" y="8" width="12" height="14" rx="2" ry="2"></rect><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M10 12h4"></path><path d="M10 16h4"></path></svg>
+                    <span>Travel Insurance</span>
+                </li>
+                <li onclick="triggerQuickAction('Accident Insurance')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span>Accident Insurance</span>
+                </li>
+                <li onclick="triggerQuickAction('Group Plans (General)')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Group Plans</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- COLUMN 3: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Policies')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Manage Policies</span>
+                </li>
+                <li onclick="triggerQuickAction('Resume Application')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                    <span>Resume Application</span>
+                </li>
+                <li onclick="triggerQuickAction('Tools & Calculators')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="10" y2="10"></line><line x1="14" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="10" y2="14"></line><line x1="14" y1="14" x2="16" y2="14"></line><line x1="8" y1="18" x2="10" y2="18"></line><line x1="14" y1="18" x2="16" y2="18"></line></svg>
+                    <span>Tools & Calculators</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="spx-search-dropdown" class="spx-search-modal">
+  <!-- Global Search Input -->
+  <div class="search-input-wrapper">
+    <span class="search-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    </span>
+    <input type="text" id="global-search-input" class="search-input-field" placeholder="Search by Products, Services, Payees" autocomplete="off" />
+  </div>
+
+  <!-- Recommended Section -->
+  <div class="search-recommended-box">
+    <h6 class="recommended-title">Recommended</h6>
+    <div class="recommended-items-grid">
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+        </div>
+        <span>Credit Cards</span>
+      </a>
+
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>Insurance</span>
+      </a>
+
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path><path d="M12 6v6l4 2"></path></svg>
+        </div>
+        <span>Loan Repayment</span>
+      </a>
+
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+        </div>
+        <span>Mutual Funds</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+                <!-- Notification Dropdown Modal -->
+<div id="spx-notification-dropdown" class="spx-notification-modal d-none">
+    <div class="notification-empty-state">
+        <div class="notification-graphic">
+            <svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                <!-- Dotted orbit -->
+                <circle cx="75" cy="75" r="50" fill="none" stroke="#d1c4e9" stroke-width="1.5" stroke-dasharray="4 4" />
+                <!-- Small purple gradient circle -->
+                <circle cx="45" cy="45" r="12" fill="url(#grad1)" />
+                <!-- Large purple circle with subtle patterns -->
+                <circle cx="85" cy="85" r="35" fill="url(#grad2)" />
+                <path d="M75 75 Q 85 65 95 75 Q 85 85 75 75" fill="#ffffff" opacity="0.2"/>
+                <!-- Definitions for gradients -->
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#b39ddb" />
+                        <stop offset="100%" stop-color="#7e57c2" />
+                    </linearGradient>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#d1c4e9" />
+                        <stop offset="100%" stop-color="#b39ddb" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <h4 class="notification-title">All caught up!</h4>
+        <p class="notification-subtitle">There are no new notifications</p>
+    </div>
+</div>
+
+
+
+                <div class="spx-header-actions">
+                    <button class="spx-header-icon-btn" id="search-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                    <button class="spx-header-icon-btn" id="notification-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </button>
+                    <a href="/home/landingPage/profilePage/services/manageProfile/personalDetails" class="spx-user-badge" id="nav-profile-badge" style="text-decoration: none;">
+                        <span class="spx-avatar-initials" id="dash-avatar"></span>
+                        <span class="spx-user-profile-label">My Profile</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+
+    <main class="spx-portal-body">
+      
+      <div style="max-width: 880px; width: 90%; margin: 12px auto 0; padding: 0;">
+        <a href="/home/landingPage/loans/personal-loan/" style="color: #5a287d; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Back to Personal Loan
+        </a>
+        
+        <!-- 5-Step Horizontal Stepper Track -->
+        <div style="max-width: 720px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: space-between; position: relative;">
+          <!-- Step 1 -->
+          <div class="stepper-item active" id="ind-step-1">
+            <div class="step-circle">1</div>
+            <span class="step-label">Basic Info</span>
+          </div>
+          <div class="step-line" id="line-step-1"></div>
+
+          <!-- Step 2 -->
+          <div class="stepper-item" id="ind-step-2">
+            <div class="step-circle">2</div>
+            <span class="step-label">Documents</span>
+          </div>
+          <div class="step-line" id="line-step-2"></div>
+
+          <!-- Step 3 -->
+          <div class="stepper-item" id="ind-step-3">
+            <div class="step-circle">3</div>
+            <span class="step-label">Loan Details</span>
+          </div>
+          <div class="step-line" id="line-step-3"></div>
+
+          <!-- Step 4 -->
+          <div class="stepper-item" id="ind-step-4">
+            <div class="step-circle">4</div>
+            <span class="step-label">Preview</span>
+          </div>
+          <div class="step-line" id="line-step-4"></div>
+
+          <!-- Step 5 -->
+          <div class="stepper-item" id="ind-step-5">
+            <div class="step-circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="display: none;" id="check-step-5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span id="num-step-5">5</span>
+            </div>
+            <span class="step-label">Status</span>
+          </div>
+        </div>
+
+        <!-- White Form Card -->
+        <div class="step-content-card" style="width: 100%; max-width: 840px; margin: 0 auto; background: white; border-radius: 14px; padding: 24px 32px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+          
+          <!-- STEP 1: Basic Info -->
+          <div class="step-content" id="step-1">
+              <h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px;">Basic Information</h2>
+              <div class="form-group" style="margin-bottom: 14px;">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-control" value=" " readonly style="width: 100%; height: 42px; font-size: 14px; padding: 0 16px;">
+              </div>
+              <div class="form-group" style="margin-bottom: 14px;">
+                  <label class="form-label">Email Address</label>
+                  <div style="display: flex; gap: 16px;">
+                      <input type="text" id="user-email-input" class="form-control" value="" readonly style="flex: 1; height: 42px; font-size: 14px; padding: 0 16px;">
+                      <button type="button" onclick="sendLoanOTP()" id="btn-send-otp" style="padding: 0 24px; height: 42px; font-size: 14px; border-radius: 8px; background: #5a287d; color: white; border: none; font-weight: 600; cursor: pointer; white-space: nowrap;">Send OTP</button>
+                  </div>
+              </div>
+              
+              <div class="form-group" id="otp-verification-group" style="display: none; margin-top: 14px; margin-bottom: 14px;">
+                  <label class="form-label">Enter 6-Digit OTP sent to your email</label>
+                  
+                  <div id="otp-section">
+                      <div class="otp-group" style="display: flex; gap: 16px;">
+                          <input type="text" class="form-control" id="mock-otp-input" placeholder="Enter OTP" style="flex: 1; max-width: 280px; height: 42px; font-size: 14px; padding: 0 16px;">
+                          <button type="button" id="btn-verify-otp" style="padding: 0 32px; height: 42px; font-size: 14px; background: #5a287d; color: white; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;" onclick="verifyLoanOTP()">Verify</button>
+                      </div>
+                  </div>
+                  
+                  <div id="otp-success" style="display: none;">
+                      <div class="verified-badge" style="display: inline-flex; align-items: center; gap: 6px; color: #10b981; font-size: 14px; font-weight: 600; margin-top: 8px;">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          Email Verified
+                      </div>
+                  </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                  <button type="button" id="btn-step1-continue" class="btn-action btn-primary" style="padding: 10px 28px; font-size: 14px; font-weight: 600; border-radius: 8px;" onclick="goToStep(2, '/home/landingPage/loans/personal-loan/doc-upload/')" disabled>Continue</button>
+              </div>
+          </div>
+
+          <!-- STEP 2: Document Verification -->
+          <div class="step-content" id="step-2">
+              <h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px;">Document Verification</h2>
+              
+              <div style="background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                      <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Account Number</div>
+                      <strong style="color: #1e293b; font-size: 15px;"></strong>
+                  </div>
+                  <div class="verified-badge" style="display: inline-flex; align-items: center; gap: 6px; color: #10b981; font-size: 13px; font-weight: 600;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      Verified
+                  </div>
+              </div>
+
+              <p style="font-size: 14px; color: #64748b; margin-bottom: 24px;">Please upload the required documents. Max file size: 5MB.</p>
+              
+              <div class="doc-row">
+                  <div class="doc-info">
+                      <div class="doc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+                      <div class="doc-name">Aadhaar Card</div>
+                  </div>
+                  <div class="doc-actions">
+                      <button class="btn-icon" title="View"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+                      <button class="btn-action btn-outline" style="padding: 6px 12px; font-size: 13px;">Upload</button>
+                  </div>
+              </div>
+              
+              <div class="doc-row">
+                  <div class="doc-info">
+                      <div class="doc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+                      <div class="doc-name">PAN Card</div>
+                  </div>
+                  <div class="doc-actions">
+                      <button class="btn-icon" title="View"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+                      <button class="btn-action btn-outline" style="padding: 6px 12px; font-size: 13px;">Upload</button>
+                  </div>
+              </div>
+
+              <div class="doc-row">
+                  <div class="doc-info">
+                      <div class="doc-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
+                      <div class="doc-name">Recent Photograph</div>
+                  </div>
+                  <div class="doc-actions">
+                      <button class="btn-icon" title="View"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+                      <button class="btn-action btn-outline" style="padding: 6px 12px; font-size: 13px;">Upload</button>
+                  </div>
+              </div>
+
+              <div class="step-footer">
+                  <button type="button" class="btn-action btn-primary" onclick="goToStep(3, '/home/landingPage/loans/personal-loan/apply-loan-application/')">Continue</button>
+              </div>
+          </div>
+
+          <!-- STEP 3: Loan Application (Embedded Form) -->
+          <div class="step-content" id="step-3">
+              <div class="spx-loan-card spx-loan-apply-card" style="box-shadow: none; border: none; padding: 0;">
+                <div class="spx-loan-card-heading" style="padding-bottom: 20px;"><div><h2>Loan Details</h2><p>Provide your financial requirements and we will calculate your estimated EMI.</p></div></div>
+                <form id="loan-application-form" onsubmit="mockSubmitLoanDetails(event)">
+                  <div class="spx-loan-form-grid">
+                    <label>Loan Type<select id="loan-type" onchange="updateLoanRate()"><option value="PERSONAL" selected>Personal Loan</option></select></label>
+                    <label>Loan Amount (₹)<input id="loan-amount" type="text" placeholder="Max ₹1,00,00,000" oninput="formatLoanAmount(this)" required></label>
+                    <label>Tenure (months)<select id="loan-tenure" onchange="calculateLoanPreview()"><option value="12">12 months</option><option value="24">24 months</option><option value="36">36 months</option><option value="48">48 months</option><option value="60" selected>60 months</option></select></label>
+                    <label>Employment Type<select id="loan-employment" required><option value="">Select</option><option>Salaried</option><option>Self Employed</option><option>Business Owner</option><option>Professional</option></select></label>
+                    <label>Monthly Income (₹)<input id="loan-income" type="text" placeholder="Enter Monthly Income" oninput="formatMonthlyIncome(this)" required></label>
+                    <label class="spx-loan-full">Purpose / Reason<textarea id="loan-purpose" rows="3" placeholder="Tell us briefly why you need the loan"></textarea></label>
+                  </div>
+                  <div id="loan-calculator-preview" style="margin-top: 16px;">
+                      <div style="display: flex; flex-direction: column; gap: 8px; padding: 16px; background: #f8fafc; border-radius: 8px;">
+                          <div style="font-size: 13px; color: #64748b;">Estimated Monthly EMI</div>
+                          <strong style="color: #5a287d; font-size: 24px;">Enter amount to calculate</strong>
+                          <div style="font-size: 13px; color: #10b981; font-weight: 500;">Interest rate starting at 12.50% p.a.</div>
+                      </div>
+                  </div>
+                  
+                  <div class="step-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid #f1f5f9;">
+                      <button type="button" class="btn-action btn-outline" id="btn-back-step2" onclick="goToStep(2, '/home/landingPage/loans/personal-loan/doc-upload/')" style="padding: 10px 24px; font-size: 14px;">&larr; Back to Documents</button>
+                      <div style="display: flex; gap: 12px;">
+                          <button type="button" class="btn-action btn-outline" id="btn-calc-emi" onclick="calculateLoanPreview(true)" style="padding: 10px 24px; font-size: 14px;">Calculate EMI</button>
+                          <button type="submit" class="btn-action btn-primary" id="btn-continue-step4" style="padding: 10px 28px; font-size: 14px; font-weight: 600; border-radius: 8px;">Continue to Preview &rarr;</button>
+                      </div>
+                  </div>
+                </form>
+              </div>
+          </div>
+
+          <!-- STEP 4: Preview Application -->
+          <div class="step-content" id="step-4">
+              <h2 class="step-title" style="margin-bottom: 24px;">Preview Application</h2>
+              <div id="loan-review-content" style="margin-bottom: 24px;">
+                  <!-- Dynamically populated via JS -->
+                  <p style="color: #64748b; text-align: center;">Loading preview...</p>
+              </div>
+              
+              <label style="display: flex; gap: 12px; font-size: 14px; color: #1e293b; align-items: flex-start; margin-bottom: 24px; cursor: pointer; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                  <input type="checkbox" id="loan-declare-check" style="width: 18px; height: 18px; accent-color: #5a287d; margin-top: 2px;" onchange="document.getElementById('btn-submit-final').disabled = !this.checked">
+                  <span>I declare that all the information provided is true and accurate. I authorize SPX Bank to verify my credit profile.</span>
+              </label>
+              
+              <div class="step-footer" style="display: flex; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 24px;">
+                  <button type="button" class="btn-action btn-outline" id="btn-back-step3" onclick="goToStep(3, '/home/landingPage/loans/personal-loan/apply-loan-application/')" style="padding: 10px 24px; font-size: 14px;">&larr; Back to Edit</button>
+                  <button type="button" class="btn-action btn-primary" id="btn-submit-final" onclick="mockFinalSubmit()" disabled style="padding: 10px 28px; font-size: 14px; font-weight: 600; border-radius: 8px;">Submit Application</button>
+              </div>
+          </div>
+
+          <!-- STEP 5: Success -->
+          <div class="step-content" id="step-5">
+              <div class="success-state">
+                  <div class="success-icon">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </div>
+                  <h2>Application Submitted Successfully</h2>
+                  <p>Your Personal Loan application is under admin review. We will notify you once approved.</p>
+                  
+                  <div class="reference-box">
+                      <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Application Reference ID</div>
+                      <strong id="success-ref-id">LN-0000</strong>
+                  </div>
+                  
+                  <div style="margin-top: 10px;">
+                      <a href="/home/landingPage/loans/manage" class="btn-action btn-primary" style="text-decoration: none;">Go to Dashboard</a>
+                  </div>
+              </div>
+          </div>
+
+        </div> <!-- End of Form Card -->
+      </div>
+    </main>
+</div>
+<script src="/app.js?v=original-loans-1"></script>
+<script>
+    // Local JS Routing and Stepper Logic
+    
+    const steps = 5;
+    
+    // Map URL patterns to step numbers
+    const routeMap = [
+        { path: 'apply', step: 1 },
+        { path: 'basicinfo', step: 1 },
+        { path: 'doc-upload', step: 2 },
+        { path: 'apply-loan-application', step: 3 },
+        { path: 'preview-loan-application', step: 4 },
+        { path: 'application-submit-status', step: 5 }
+    ];
+
+    function determineStepFromURL() {
+        const path = window.location.pathname;
+        let matchedStep = 1;
+        for (let r of routeMap) {
+            if (path.includes(r.path)) {
+                matchedStep = r.step;
+            }
+        }
+        return matchedStep;
+    }
+
+    function updateStepperUI(currentStep) {
+        // Update Indicators & Lines
+        for (let i = 1; i <= steps; i++) {
+            const ind = document.getElementById('ind-step-' + i);
+            if (ind) {
+                if (i < currentStep) {
+                    ind.className = 'stepper-item completed';
+                } else if (i === currentStep) {
+                    ind.className = 'stepper-item active';
+                } else {
+                    ind.className = 'stepper-item';
+                }
+            }
+            
+            // Checkmark logic for completed steps
+            const circle = ind ? ind.querySelector('.step-circle') : null;
+            if (circle) {
+                if (i < currentStep || (i === 5 && currentStep === 5)) {
+                    circle.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                } else {
+                    circle.innerHTML = i;
+                }
+            }
+            
+            // Show/Hide Content
+            const content = document.getElementById('step-' + i);
+            if (content) {
+                if (i === currentStep) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            }
+        }
+    }
+
+    function goToStep(stepNumber, url) {
+        if (url) {
+            history.pushState(null, '', url);
+        }
+        updateStepperUI(stepNumber);
+    }
+
+    // Handle Browser Back/Forward
+    window.addEventListener('popstate', () => {
+        const step = determineStepFromURL();
+        updateStepperUI(step);
+    });
+
+    // Initialize on Load
+    document.addEventListener('DOMContentLoaded', () => {
+        const initialStep = determineStepFromURL();
+        // Force URL to match step 1 if generic apply/ route
+        if (window.location.pathname.endsWith('/apply/')) {
+             history.replaceState(null, '', '/home/landingPage/loans/personal-loan/basicinfo/email-verify/');
+        }
+        updateStepperUI(initialStep);
+    });
+
+    // Real Step 1 Verification
+    async function sendLoanOTP() {
+        const btn = document.getElementById('btn-send-otp');
+        btn.textContent = 'Sending...';
+        btn.disabled = true;
+
+        try {
+            const r = await fetch('/api/loans/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+            });
+            const d = await r.json();
+            if (d.status === 'success') {
+                btn.textContent = 'OTP Sent';
+                btn.style.background = '#10b981';
+                document.getElementById('otp-verification-group').style.display = 'block';
+            } else {
+                alert(d.message || 'Failed to send OTP.');
+                btn.textContent = 'Send OTP';
+                btn.disabled = false;
+            }
+        } catch (e) {
+            alert('Server error.');
+            btn.textContent = 'Send OTP';
+            btn.disabled = false;
+        }
+    }
+
+    async function verifyLoanOTP() {
+        const input = document.getElementById('mock-otp-input').value;
+        if (input.length < 6) { 
+            alert('Please enter a valid 6-digit OTP code.');
+            return;
+        }
+        
+        const btn = document.getElementById('btn-verify-otp');
+        const oldText = btn.textContent;
+        btn.textContent = 'Verifying...';
+        btn.disabled = true;
+
+        try {
+            const r = await fetch('/api/loans/verify-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ otp: input })
+            });
+            const d = await r.json();
+            if (d.status === 'success') {
+                document.getElementById('otp-section').style.display = 'none';
+                document.getElementById('otp-success').style.display = 'block';
+                document.getElementById('btn-step1-continue').disabled = false;
+            } else {
+                alert(d.message || 'Invalid OTP.');
+                btn.textContent = oldText;
+                btn.disabled = false;
+            }
+        } catch(e) {
+            alert('Server error.');
+            btn.textContent = oldText;
+            btn.disabled = false;
+        }
+    }
+
+    // Step 3 to Step 4 logic
+    async function mockSubmitLoanDetails(e) {
+        e.preventDefault();
+        
+        const data = getLoanFormData();
+        if(data.amount < 10000) { showToast('Loan amount must be at least ₹10,000.', 'error'); return; }
+        
+        // Fetch real EMI details to show in preview
+        let emiData = { emi: 0, interest_rate: 12.5, total_interest: 0, total_payable: 0 };
+        try {
+            const r = await fetch('/api/loans/calculate',{
+                method:'POST',
+                credentials:'include',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify(data)
+            });
+            const d = await r.json();
+            if (d.success) emiData = d;
+        } catch (err) { console.error('EMI calculation failed for preview'); }
+
+        const userName = currentUser?.name || '';
+        const userEmail = currentUser?.email || '';
+        const userAccount = currentUser?.accountNumber || '';
+
+        const previewHTML = `
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Section A: Applicant Profile -->
+                <div style="background: white; border-radius: 8px; border: 1px solid #e2e8f0; padding: 16px;">
+                    <h3 style="font-size: 15px; color: #1e293b; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">A. Applicant Profile</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 14px;">
+                        <div><span style="color: #64748b;">Full Name:</span> <strong style="color: #1e293b;">${userName}</strong></div>
+                        <div><span style="color: #64748b;">Email Address:</span> <strong style="color: #1e293b;">${userEmail}</strong></div>
+                        <div><span style="color: #64748b;">Linked Account:</span> <strong style="color: #1e293b;">${userAccount}</strong></div>
+                        <div><span style="color: #64748b;">Employment Type:</span> <strong style="color: #1e293b;">${data.employment_type}</strong></div>
+                    </div>
+                </div>
+
+                <!-- Section B: Loan & Repayment Summary -->
+                <div style="background: white; border-radius: 8px; border: 1px solid #e2e8f0; padding: 16px;">
+                    <h3 style="font-size: 15px; color: #1e293b; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">B. Loan & Repayment Summary</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 14px; margin-bottom: 16px;">
+                        <div><span style="color: #64748b;">Loan Amount:</span> <strong style="color: #1e293b;">₹${data.amount.toLocaleString('en-IN')}</strong></div>
+                        <div><span style="color: #64748b;">Tenure:</span> <strong style="color: #1e293b;">${data.tenure_months} Months</strong></div>
+                        <div><span style="color: #64748b;">Interest Rate:</span> <strong style="color: #1e293b;">${emiData.interest_rate.toFixed(2)}% p.a.</strong></div>
+                        <div style="grid-column: span 2;"><span style="color: #64748b;">Purpose / Reason:</span> <strong style="color: #1e293b;">${data.purpose || 'Not specified'}</strong></div>
+                    </div>
+                    
+                    <div style="background: #f8fafc; padding: 16px; border-radius: 8px;">
+                        <div style="font-size: 13px; color: #64748b;">Estimated Monthly EMI</div>
+                        <strong style="color: #5a287d; font-size: 24px; display: block; margin-bottom: 8px;">₹${emiData.emi.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})} / month</strong>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; color: #475569; margin-top: 8px; border-top: 1px solid #e2e8f0; padding-top: 8px;">
+                            <span>Total Interest: <strong style="color: #1e293b;">₹${emiData.total_interest.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong></span>
+                            <span>Total Payable: <strong style="color: #1e293b;">₹${emiData.total_payable.toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section C: Verified Documents -->
+                <div style="background: white; border-radius: 8px; border: 1px solid #e2e8f0; padding: 16px;">
+                    <h3 style="font-size: 15px; color: #1e293b; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">C. Verified Documents</h3>
+                    <div style="display: flex; gap: 12px; font-size: 13px; color: #10b981; font-weight: 500;">
+                        <span style="background: #d1fae5; padding: 6px 12px; border-radius: 4px;">✓ Identity Proof (Aadhaar/PAN)</span>
+                        <span style="background: #d1fae5; padding: 6px 12px; border-radius: 4px;">✓ Signature & Photo Verified</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById('loan-review-content').innerHTML = previewHTML;
+        
+        // Reset checkbox on entry
+        const cb = document.getElementById('loan-declare-check');
+        if(cb){ cb.checked = false; document.getElementById('btn-submit-final').disabled = true; }
+        
+        // We set global so final submit works
+        window.tempLoanData = data; 
+        
+        goToStep(4, '/home/landingPage/loans/personal-loan/preview-loan-application/');
+    }
+
+    async function mockFinalSubmit() {
+        if (!window.tempLoanData) return;
+        
+        // Actual API call
+        try {
+            const r = await fetch('/api/loans/apply', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(window.tempLoanData)
+            });
+            const d = await r.json();
+            if(!d.success) {
+                showToast(d.message || 'Loan application failed.', 'error');
+                return;
+            }
+            
+            document.getElementById('success-ref-id').textContent = d.reference_id;
+            goToStep(5, '/home/landingPage/loans/personal-loan/application-submit-status/');
+            
+        } catch(e) {
+            showToast('Submission error', 'error');
+        }
+    }
+
+    // Populate the original server-rendered fields from the authenticated API.
+    document.addEventListener('DOMContentLoaded', async () => {
+        const user = await fetchCurrentBankUser();
+        if (!user) return;
+        const email = document.getElementById('user-email-input');
+        if (email) email.value = user.email || '';
+        const accountLabels = [...document.querySelectorAll('strong')];
+        accountLabels.forEach(node => { if (!node.textContent.trim() && node.parentElement?.textContent.includes('Account Number')) node.textContent = user.accountNumber || ''; });
+        const readonlyInputs = [...document.querySelectorAll('input[readonly]')];
+        if (readonlyInputs[0]) readonlyInputs[0].value = user.name || '';
+        document.querySelectorAll('.doc-actions .btn-action').forEach(button => {
+            button.type = 'button';
+            button.addEventListener('click', () => {
+                const picker = document.createElement('input'); picker.type = 'file'; picker.accept = '.pdf,.jpg,.jpeg,.png';
+                picker.onchange = () => { if (picker.files[0]) { button.textContent = 'Selected'; button.style.color = '#10b981'; button.closest('.doc-row').dataset.selected = 'true'; } };
+                picker.click();
+            });
+        });
+    });
+</script>
+</body>
+</html>
+
+
+

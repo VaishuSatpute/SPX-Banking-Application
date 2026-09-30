@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK — Central Transaction Monitoring</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        
+        <!-- SIDEBAR -->
+        {% include 'admin_sidebar.html' %}
+
+        <!-- MAIN CONTAINER -->
+        <main class="admin-main">
+            
+            <header class="admin-topbar">
+                <div class="admin-topbar-title-group">
+                    <h1 class="admin-page-title">Central Transaction Monitoring</h1>
+                    <span class="admin-badge-master">LEDGER AUDIT</span>
+                </div>
+
+                <div class="admin-topbar-actions">
+                    <button onclick="handleAdminLogout()" class="admin-logout-btn">Logout</button>
+                </div>
+            </header>
+
+            <div class="admin-content">
+                
+                <div class="admin-card-table">
+                    <div class="table-header-toolbar">
+                        <div class="table-title">System Banking Ledger & Transfers</div>
+                    </div>
+
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Reference ID</th>
+                                    <th>Customer Info</th>
+                                    <th>Transaction Type</th>
+                                    <th>Amount</th>
+                                    <th>Balance After</th>
+                                    <th>Status</th>
+                                    <th>Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tx-table-body">
+                                <tr><td colspan="7" style="text-align: center; padding: 25px; color: var(--admin-text-muted);">Fetching transactions log...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>
+
+

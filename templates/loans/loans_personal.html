@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK - Personal Loan</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .personal-loan-wrapper {
+            max-width: 1280px; 
+            margin: 0 auto; 
+            padding: 0 24px; 
+            min-height: calc(100vh - 120px); 
+            display: flex; 
+            align-items: center;
+        }
+
+        .personal-loan-grid {
+            display: grid; 
+            grid-template-columns: 1fr 1.2fr; 
+            gap: 32px; 
+            width: 100%;
+            margin-top: 24px;
+        }
+        
+        .hero-action-card {
+            background: white; 
+            border-radius: 16px; 
+            padding: 36px; 
+            border: 1px solid #e2e8f0; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+        }
+
+        .hero-badge {
+            background: #f3e8ff; 
+            color: #5a287d; 
+            font-weight: 600; 
+            font-size: 12px; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            width: fit-content;
+        }
+        
+        .hero-action-card h1 {
+            font-size: 32px; 
+            font-weight: 700; 
+            color: #1e293b; 
+            margin: 16px 0 10px;
+        }
+        
+        .hero-action-card p {
+            color: #64748b; 
+            font-size: 15px; 
+            line-height: 1.6; 
+            margin-bottom: 24px;
+        }
+        
+        .btn-primary {
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            padding: 14px 28px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            border-radius: 10px; 
+            text-decoration: none;
+            background-color: #5a287d;
+            color: white;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(90, 40, 125, 0.2);
+            width: fit-content;
+        }
+
+        .btn-primary:hover {
+            background-color: #461f62;
+            transform: translateY(-1px);
+        }
+        
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .metrics-bar {
+            display: flex;
+            gap: 16px;
+        }
+
+        .metric-card {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border-left: 4px solid #5a287d;
+        }
+
+        .metric-card h3 {
+            color: #64748b;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        
+        .metric-card p {
+            color: #0f172a;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .features-grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .feature-card-compact {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .feature-icon-sm {
+            background-color: #f1f5f9;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a287d;
+            flex-shrink: 0;
+        }
+
+        .feature-card-compact h3 {
+            color: #0f172a;
+            font-size: 14px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .feature-card-compact p {
+            color: #64748b;
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .eligibility-strip-compact {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .eligibility-item-compact {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .eligibility-item-compact svg {
+            color: #10b981;
+        }
+
+        .spx-loan-breadcrumb {
+            margin-bottom: 16px;
+            position: absolute;
+            top: 24px;
+            left: 24px;
+        }
+
+        @media (max-width: 992px) {
+            .personal-loan-grid {
+                grid-template-columns: 1fr;
+            }
+            .personal-loan-wrapper {
+                min-height: auto;
+                padding-top: 60px;
+                padding-bottom: 60px;
+                display: block;
+            }
+            .spx-loan-breadcrumb {
+                position: relative;
+                top: 0;
+                left: 0;
+            }
+        }
+        @media (max-width: 600px) {
+            .metrics-bar {
+                flex-direction: column;
+            }
+            .features-grid-2x2 {
+                grid-template-columns: 1fr;
+            }
+            .eligibility-strip-compact {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+<div class="portal-wrapper">
+    {% include 'components/header.html' %}
+    <main class="spx-portal-body" style="position: relative;">
+      <div class="personal-loan-wrapper">
+          
+        <div class="spx-loan-breadcrumb" style="font-size: 14px; font-weight: 500; display: flex; align-items: center;">
+            <a href="/home/landingPage/homePage" title="Back to Overview" style="color: #64748b; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#5a287d'" onmouseout="this.style.color='#64748b'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </a>
+            <span style="color: #cbd5e1; margin: 0 10px;">/</span>
+            <span style="color: #5a287d; font-weight: 600;">Personal Loan</span>
+        </div>
+
+        <div class="personal-loan-grid">
+            <!-- LEFT COLUMN (Hero Action Card) -->
+            <div class="hero-action-card">
+                <span class="hero-badge">INSTANT & PAPERLESS</span>
+                <h1>Personal Loan</h1>
+                <p>Fulfill your urgent financial needs with quick approval and funds disbursed directly to your account.</p>
+                <a href="/home/landingPage/loans/personal-loan/apply/" class="btn-primary">Apply for Personal Loan &rarr;</a>
+            </div>
+
+            <!-- RIGHT COLUMN (Metrics & Feature Cards) -->
+            <div class="right-column">
+                <div class="metrics-bar">
+                    <div class="metric-card">
+                        <h3>Interest Rate</h3>
+                        <p>From 10.99% p.a.</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Flexible Tenure</h3>
+                        <p>12 to 60 Months</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Process</h3>
+                        <p>100% Digital</p>
+                    </div>
+                </div>
+
+                <div class="features-grid-2x2">
+                    <div class="feature-card-compact">
+                        <div class="feature-icon-sm">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <div>
+                            <h3>No Collateral Required</h3>
+                            <p>Get a loan unsecured. No need to pledge assets.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card-compact">
+                        <div class="feature-icon-sm">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <div>
+                            <h3>Instant Eligibility Check</h3>
+                            <p>Find exactly how much you can borrow instantly.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card-compact">
+                        <div class="feature-icon-sm">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        </div>
+                        <div>
+                            <h3>Quick Disbursal</h3>
+                            <p>Funds transferred to your account post approval.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card-compact">
+                        <div class="feature-icon-sm">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        </div>
+                        <div>
+                            <h3>Zero Hidden Charges</h3>
+                            <p>Complete clarity on fees and prepayments.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="eligibility-strip-compact">
+                    <div class="eligibility-item-compact">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Age 21-58</span>
+                    </div>
+                    <div class="eligibility-item-compact">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Min Net ₹25,000/mo</span>
+                    </div>
+                    <div class="eligibility-item-compact">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Salaried / Self-Employed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </main>
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+

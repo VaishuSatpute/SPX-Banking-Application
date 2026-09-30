@@ -1,0 +1,30 @@
+<!-- Notification Dropdown Modal -->
+<div id="spx-notification-dropdown" class="spx-notification-modal d-none">
+    <div class="notification-empty-state">
+        <div class="notification-graphic">
+            <svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                <!-- Dotted orbit -->
+                <circle cx="75" cy="75" r="50" fill="none" stroke="#d1c4e9" stroke-width="1.5" stroke-dasharray="4 4" />
+                <!-- Small purple gradient circle -->
+                <circle cx="45" cy="45" r="12" fill="url(#grad1)" />
+                <!-- Large purple circle with subtle patterns -->
+                <circle cx="85" cy="85" r="35" fill="url(#grad2)" />
+                <path d="M75 75 Q 85 65 95 75 Q 85 85 75 75" fill="#ffffff" opacity="0.2"/>
+                <!-- Definitions for gradients -->
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#b39ddb" />
+                        <stop offset="100%" stop-color="#7e57c2" />
+                    </linearGradient>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#d1c4e9" />
+                        <stop offset="100%" stop-color="#b39ddb" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <h4 class="notification-title">All caught up!</h4>
+        <p class="notification-subtitle">There are no new notifications</p>
+    </div>
+</div>
+

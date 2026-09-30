@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK - Loans</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+<div class="portal-wrapper">
+    {% include 'components/header.html' %}
+    <main class="spx-portal-body">
+      <div class="spx-loan-page" style="max-width: 1320px; margin: 0 auto; padding-left: 24px; padding-right: 24px; width: 100%; box-sizing: border-box;">
+        <div class="breadcrumb-container d-flex align-items-center gap-2 mb-3 text-muted fs-7" style="font-size: 13px; color: #64748b; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+          <a href="/home/landingPage/homePage" class="text-decoration-none text-muted d-inline-flex align-items-center gap-1 hover-primary" style="color: #64748b; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Home
+          </a>
+          <span>›</span>
+          <a href="/home/landingPage/manageRelationship/transactionAccounts" class="text-decoration-none text-muted" style="color: #64748b; text-decoration: none;">Relationship Overview</a>
+          <span>›</span>
+          <span class="text-dark fw-medium" style="color: #1e293b; font-weight: 600;">Loans</span>
+        </div>
+
+        <div class="hero-banner rounded-4 p-4 mb-4 text-white d-flex justify-content-between align-items-center flex-wrap gap-3" 
+             style="background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%); box-shadow: 0 10px 25px -5px rgba(91, 33, 182, 0.25); border-radius: 16px; padding: 24px; margin-bottom: 24px; color: white; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+          
+          <div>
+            <span class="badge bg-white bg-opacity-20 text-white text-uppercase tracking-wider fw-semibold px-2 py-1 mb-2" style="display: inline-block; background: rgba(255, 255, 255, 0.2); font-size: 10px; letter-spacing: 0.8px; padding: 4px 8px; border-radius: 4px; margin-bottom: 8px; font-weight: 600; text-transform: uppercase;">
+              Loan Services
+            </span>
+            <h3 class="fw-bold mb-1 fs-4 tracking-tight" style="margin: 0 0 4px 0; font-size: 24px; font-weight: 700;">Manage Loans & Repayments</h3>
+            <p class="text-white-50 mb-0 fs-7" style="margin: 0; color: rgba(255, 255, 255, 0.7); font-size: 14px;">Track applications, approvals, EMI schedules, and repayments in real time.</p>
+          </div>
+
+          <!-- Compact Glassmorphism Account Chip -->
+          <div class="bg-white bg-opacity-10 border border-white border-opacity-20 rounded-3 px-3 py-2 text-end text-white">
+            <div class="text-white-50 text-uppercase" style="font-size: 10px; letter-spacing: 0.5px;">Linked Account</div>
+            <div class="fw-bold font-monospace small">•••• {{ (account_number|string)[-4:] if account_number else '3928' }}</div>
+          </div>
+        </div>
+
+        <section class="spx-loan-card" style="margin-top:22px"><div class="spx-loan-card-heading"><div><h2>My Loans</h2><p>Track your applications, approved loans, outstanding principal and repayments.</p></div><button class="spx-loan-secondary" onclick="loadMyLoans()">Refresh</button></div><div id="my-loans-container"><div class="spx-loan-empty">Loading your loan records...</div></div></section>
+
+        <section class="spx-loan-card" style="margin-top:22px"><div class="spx-loan-card-heading"><div><h2>Loan Repayment</h2><p>Select an active loan and make a repayment from your SPX Bank balance.</p></div></div><div id="loan-payment-container"><div class="spx-loan-empty">Your repayment controls will appear when you have an active loan.</div></div></section>
+      </div>
+    </main>
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script>document.addEventListener('DOMContentLoaded',()=>{ loadMyLoans(); updateLoanRate(); });</script>
+</body>
+</html>
+

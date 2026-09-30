@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK - Transaction Accounts</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <meta name="description" content="Your SPX BANK Net Banking - Transaction Accounts.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Notification Toast System -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- MAIN PORTAL WRAPPER -->
+    <div class="portal-wrapper">
+
+        <!-- SPX BANK TOP NAVIGATION STRIP -->
+        <div class="spx-top-nav">
+            <div class="spx-top-nav-container">
+                <div class="spx-top-nav-left">
+                    <span class="spx-top-tab">Banking</span>
+                </div>
+                <div class="spx-top-nav-right">
+                    <a href="#" class="spx-top-link spx-icon-link" onclick="triggerQuickAction('Get Help')">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Get Help
+                    </a>
+                    <a href="tel:1800111101" class="spx-top-link spx-icon-link">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        1800-11-1101
+                    </a>
+                    <div class="spx-top-link spx-lang-selector">
+                        English
+                        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-font-btn">A-</button>
+                    <button class="spx-font-btn">A</button>
+                    <button class="spx-font-btn">A+</button>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN BRANDING HEADER -->
+        <header class="spx-main-header">
+            <div class="spx-header-container">
+                <div class="spx-logo-block" onclick="window.location.href='/'">
+                    <span class="spx-text">SPX BANK</span>
+                    <span class="net-banking-tag">NET-BANKING</span>
+                </div>
+
+                <!-- NAVIGATION MENU (logged-in state) -->
+                <nav class="spx-main-nav">
+                    <div class="spx-nav-menu logged-in-menu">
+                        <a href="/home/landingPage/homePage" class="spx-nav-item">Overview</a>
+                        <a href="/home/landingPage/manageRelationship/transactionAccounts" class="spx-nav-item active">Accounts</a>
+                        <a id="nav-payments-tab" class="spx-nav-item" href="#">Payments</a>
+                        <a id="nav-deposits-tab" class="spx-nav-item" href="#">Deposits</a>
+                        <a id="nav-loans-tab" class="spx-nav-item" href="#">Loans</a>
+                        <a id="nav-cards-tab" class="spx-nav-item" href="#">Cards</a>
+                        <a id="nav-investments-tab" class="spx-nav-item" href="#">Investments</a>
+                        <a id="nav-insurance-tab" class="spx-nav-item" href="#">Insurance</a>
+                        <a id="nav-services-tab" class="spx-nav-item" href="#">Services</a>
+                        {% include 'components/services_mega_menu.html' %}
+                    </div>
+                </nav>
+
+                {% include 'components/mega_menu.html' %}
+                {% include 'components/deposits_mega_menu.html' %}
+                {% include 'components/loans_mega_menu.html' %}
+                {% include 'components/cards_mega_menu.html' %}
+                {% include 'components/investments_mega_menu.html' %}
+                {% include 'components/insurance_mega_menu.html' %}
+                {% include 'components/search_modal.html' %}
+                {% include 'components/notification_modal.html' %}
+
+                <div class="spx-header-actions">
+                    <button class="spx-header-icon-btn" id="search-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                    <button class="spx-header-icon-btn" id="notification-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </button>
+                    <a href="/home/landingPage/profilePage/services/manageProfile/personalDetails" class="spx-user-badge" id="nav-profile-badge" style="text-decoration: none;">
+                        <span class="spx-avatar-initials" id="dash-avatar">{{ user_initials }}</span>
+                        <span class="spx-user-profile-label">My Profile</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- PORTAL MAIN CONTENT -->
+        <main class="spx-portal-body">
+
+            <div id="accounts-view" class="yono-accounts-wrapper">
+                <!-- Breadcrumbs -->
+                <div class="yono-breadcrumbs">
+                    <a href="/home/landingPage/homePage">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    </a>
+                    <span class="yono-breadcrumbs-icon">&gt;</span>
+                    <span style="color: #333;">Relationship Overview</span>
+                    <span class="yono-breadcrumbs-icon" id="yono-breadcrumb-divider" style="display: none;">&gt;</span>
+                    <span id="yono-breadcrumb-active" style="display: none;">Transaction Accounts</span>
+                </div>
+
+                <!-- Top Sub-Nav Bar -->
+                <div class="yono-subnav-bar">
+                    <div class="yono-subnav-tabs">
+                        <div class="yono-subnav-tab active" onclick="switchYonoTab('Transaction Accounts', this)">Transaction Accounts</div>
+                        <div class="yono-subnav-tab" onclick="switchYonoTab('Deposits', this)">Deposits</div>
+                        <div class="yono-subnav-tab" onclick="window.location.href='/home/landingPage/loans/manage'">Loans</div>
+                        <div class="yono-subnav-tab" onclick="switchYonoTab('Investments', this)">Investments</div>
+                        <div class="yono-subnav-tab" onclick="switchYonoTab('Insurance', this)">Insurance</div>
+                    </div>
+                    <button class="yono-view-all-btn">
+                        View All Accounts
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                </div>
+
+                <!-- Layout Grid -->
+                <div class="yono-layout-grid">
+                    <!-- Left Sidebar -->
+                    <div class="yono-sidebar">
+                        <input type="text" class="yono-search-box" placeholder="Search here...">
+
+                        <div class="yono-sidebar-section">
+                            <div class="yono-sidebar-title">Savings Account</div>
+                            <div class="yono-active-account-card">
+                                <div class="yono-acc-label">A/C Number</div>
+                                <div class="yono-acc-number" style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="account-number-text" data-full-account="{{ account_number if account_number else 'XXXXXXX5378' }}">********{{ (account_number|string)[-4:] if account_number else '5378' }}</span>
+                                    <i class="fas fa-eye-slash toggle-account-visibility" style="cursor: pointer; opacity: 0.8; font-size: 14px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Main Panel -->
+                    <div class="yono-main-panel" id="yono-main-content-area">
+                        <div class="yono-main-header">
+                            <div class="yono-main-header-left">
+                                <span style="display: flex; align-items: center; gap: 10px;">
+                                    SAVINGS A/C &nbsp;&nbsp;&nbsp;&nbsp; 
+                                    <span class="account-number-text" data-full-account="{{ account_number if account_number else 'XXXXXXX5378' }}">********{{ (account_number|string)[-4:] if account_number else '5378' }}</span>
+                                    <i class="fas fa-eye-slash toggle-account-visibility" style="cursor: pointer; opacity: 0.8; font-size: 14px;"></i>
+                                </span>
+                            </div>
+                            <a href="#" class="yono-main-header-right">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                Manage Account
+                            </a>
+                        </div>
+                        <div class="yono-main-content">
+                            <div class="yono-secondary-tabs">
+                                <div class="yono-secondary-tab active" onclick="switchSecondaryTab('summary', this)">Account Summary</div>
+                                <div class="yono-secondary-tab" onclick="switchSecondaryTab('transactions', this)">Transactions</div>
+                                <div class="yono-secondary-tab" onclick="switchSecondaryTab('statements', this)">Statements</div>
+                            </div>
+
+                            <!-- TAB 1: Account Summary -->
+                            <div id="sec-tab-summary">
+                                <div class="yono-details-grid">
+                                    <div class="yono-details-list">
+                                        <div class="yono-detail-item">
+                                            <span class="yono-detail-label">Account Description</span>
+                                            <span class="yono-detail-value">SB SGSP GOLD</span>
+                                        </div>
+                                        <div class="yono-detail-item">
+                                            <span class="yono-detail-label">Currency</span>
+                                            <span class="yono-detail-value">Rupees</span>
+                                        </div>
+                                        <div class="yono-detail-item">
+                                            <span class="yono-detail-label">Mode of Operation</span>
+                                            <span class="yono-detail-value">Single</span>
+                                        </div>
+                                        <div class="yono-detail-item">
+                                            <span class="yono-detail-label">Rate of Interest</span>
+                                            <span class="yono-detail-value">2.50%</span>
+                                        </div>
+                                        <div class="yono-detail-item">
+                                            <span class="yono-detail-label">Nominee(s)</span>
+                                            <a href="#" class="yono-detail-link">View Details</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="yono-balance-card">
+                                        <div class="yono-balance-row">
+                                            <span class="yono-balance-label">Available Balance</span>
+                                            <span class="yono-balance-value primary">₹{{ balance if balance else '1,623.55' }}</span>
+                                        </div>
+                                        <div class="yono-balance-row">
+                                            <span class="yono-balance-label">Hold/Lien Amount</span>
+                                            <span class="yono-balance-value">₹0.00</span>
+                                        </div>
+                                        <div class="yono-balance-row">
+                                            <span class="yono-balance-label">Uncleared Balance</span>
+                                            <span class="yono-balance-value">₹0.00</span>
+                                        </div>
+                                        <div class="yono-balance-row">
+                                            <span class="yono-balance-label">MOD Balance</span>
+                                            <span class="yono-balance-value">₹0.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="yono-debit-card-box">
+                                    <div class="yono-debit-card-inner" onclick="triggerQuickAction('Debit Card Management')">
+                                        <div>
+                                            <div class="yono-debit-title">Debit Card</div>
+                                            <div class="yono-debit-subtitle">View, Apply &amp; Manage</div>
+                                        </div>
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#333" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB 2: Transactions -->
+                            <div id="sec-tab-transactions" style="display: none;">
+                                <div class="yono-transactions-table-header" style="margin-top: 25px;">
+                                    <div class="yono-th-date">Date</div>
+                                    <div class="yono-th-desc">Description</div>
+                                    <div class="yono-th-amount">Amount (Rs.)</div>
+                                    <div class="yono-th-balance">Balance (Rs.)</div>
+                                </div>
+                                
+                                <div id="transactions-loading" class="yono-empty-state" style="margin-top: 10px; background: transparent; box-shadow: none;"><p>Loading transactions...</p></div>
+                                <div id="transactions-table-body" class="yono-transactions-table-body"></div>
+                            </div>
+
+                            <!-- TAB 3: Statements -->
+                            <div id="sec-tab-statements" style="display: none;" class="yono-statements-container">
+                                <h3 class="yono-statement-heading">Request Statement</h3>
+                                
+                                <div class="yono-radio-row">
+                                    <label class="yono-radio-label">
+                                        <input type="radio" id="selectDuration" name="statementType" value="duration" checked onchange="toggleStatementType()">
+                                        <span class="yono-custom-radio"></span>
+                                        Select Duration
+                                    </label>
+                                    <label class="yono-radio-label">
+                                        <input type="radio" id="selectFinancialYear" name="statementType" value="fy" onchange="toggleStatementType()">
+                                        <span class="yono-custom-radio"></span>
+                                        Select Financial Year
+                                    </label>
+                                </div>
+
+                                <div class="yono-dropdowns-row">
+                                    <div class="yono-dropdown-group">
+                                        <label class="yono-dropdown-label">Duration</label>
+                                        <select id="durationSelect" class="yono-select" onchange="handleStatementDurationChange()">
+                                            <option>Current Month</option>
+                                            <option>Last Month</option>
+                                            <option>Last 3 Months</option>
+                                            <option>Current Financial Year</option>
+                                            <option>Last Financial Year</option>
+                                            <option>Custom Date Range</option>
+                                        </select>
+                                    </div>
+                                    <div class="yono-dropdown-group">
+                                        <label class="yono-dropdown-label">Financial Year</label>
+                                        <select id="fySelect" class="yono-select" disabled onchange="toggleStatementType()">
+                                            <option>2026 - 2027</option>
+                                            <option>2025 - 2026</option>
+                                            <option>2024 - 2025</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="yono-dropdowns-row" style="margin-top: 10px;">
+                                    <div class="yono-dropdown-group">
+                                        <label class="yono-dropdown-label">Format</label>
+                                        <select id="statementFormat" class="yono-select">
+                                            <option value="pdf">PDF</option>
+                                            <option value="xlsx">Excel (XLSX)</option>
+                                            <option value="csv">CSV</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="customDateRow" class="yono-custom-date-row">
+                                    <div class="yono-dropdown-group"><label class="yono-dropdown-label">From</label><input id="statementStartDate" type="date"></div>
+                                    <div class="yono-dropdown-group"><label class="yono-dropdown-label">To</label><input id="statementEndDate" type="date"></div>
+                                </div>
+                                <div class="yono-statement-actions" style="margin-top: 40px;">
+                                    <button type="button" class="yono-download-btn" onclick="downloadStatement()">Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- OTP VERIFICATION DRAWER -->
+        <div id="otp-modal-overlay" class="otp-drawer-overlay hidden">
+            <div class="otp-drawer">
+                <div class="otp-drawer-header">
+                    <button class="otp-close-btn" onclick="closeOtpModal()" title="Close OTP Verification">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                <div class="otp-drawer-content">
+                    <p class="otp-delivery-notice">
+                        An OTP has been sent to your registered mobile number / Gmail: <br>
+                        <strong id="otp-target-display" class="spx-otp-target">user@gmail.com</strong>
+                    </p>
+                    <!-- OTP Code Inputs -->
+                    <div class="spx-otp-fields-row">
+                        <div class="otp-inputs-wrapper" id="otp-inputs">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="0" autofocus>
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="1">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="2">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="3">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="4">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="5">
+                        </div>
+                        <button type="button" class="spx-otp-reveal-btn" onclick="showToast('OTP is hidden for security', 'info')">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                    <div class="otp-resend-container" style="margin-top: 15px; font-size: 13px;">
+                        <span class="text-muted" style="color: #cbd5e1;">Didn't receive the code? </span>
+                        <span id="resend-wrapper" class="resend-disabled" style="color: #38bdf8;">
+                            Resend OTP in <span id="countdown-display">60s</span>
+                        </span>
+                    </div>
+                    <div class="spx-otp-submit-row">
+                        <button type="button" class="spx-btn-otp-proceed" id="btn-verify-otp" onclick="submitOtpVerification()">
+                            <span class="btn-text">Proceed</span>
+                            <span class="btn-spinner hidden"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPX BANK THEMED SESSION TIMEOUT / ERROR DIALOG -->
+        <div id="timeout-modal-overlay" class="timeout-modal-overlay hidden">
+            <div class="timeout-modal">
+                <div class="timeout-modal-title">Under Development</div>
+                <div class="timeout-modal-body">
+                    <div class="timeout-caution-icon">
+                        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#dc2626" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <p class="timeout-message" id="timeout-message-text">this feature is currently under development.</p>
+                </div>
+                <div class="timeout-modal-footer">
+                    <button class="timeout-ok-btn" onclick="closeTimeoutModal()">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="spx-portal-footer">
+            <div class="spx-footer-container">
+                <div class="spx-footer-links">
+                    <a href="#about" onclick="triggerQuickAction('About Us')">About Us</a>
+                    <span class="spx-footer-divider">|</span>
+                    <a href="#terms" onclick="triggerQuickAction('Terms &amp; Conditions')">Terms &amp; Conditions</a>
+                    <span class="spx-footer-divider">|</span>
+                    <a href="#privacy" onclick="triggerQuickAction('Privacy Policy')">Privacy Policy</a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleButtons = document.querySelectorAll('.toggle-account-visibility');
+            toggleButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const textSpan = this.previousElementSibling;
+                    const fullAccount = textSpan.getAttribute('data-full-account');
+                    const last4 = fullAccount ? fullAccount.slice(-4) : 'XXXX';
+                    
+                    if (this.classList.contains('fa-eye-slash')) {
+                        // Currently masked, switch to full unmasked number
+                        textSpan.textContent = fullAccount;
+                        this.classList.remove('fa-eye-slash');
+                        this.classList.add('fa-eye');
+                    } else {
+                        // Currently unmasked, switch back to masked
+                        textSpan.textContent = '********' + last4;
+                        this.classList.remove('fa-eye');
+                        this.classList.add('fa-eye-slash');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+

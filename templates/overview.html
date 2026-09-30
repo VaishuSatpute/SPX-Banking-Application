@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK - Dashboard Overview</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <meta name="description" content="Your SPX BANK Net Banking Dashboard — Account Overview, Quick Actions and Services.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Notification Toast System -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- MAIN PORTAL WRAPPER -->
+    <div class="portal-wrapper">
+
+        <!-- SPX BANK TOP NAVIGATION STRIP -->
+        <div class="spx-top-nav">
+            <div class="spx-top-nav-container">
+                <div class="spx-top-nav-left">
+                    <span class="spx-top-tab">Banking</span>
+                </div>
+                <div class="spx-top-nav-right">
+                    <a href="#" class="spx-top-link spx-icon-link" onclick="triggerQuickAction('Get Help')">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Get Help
+                    </a>
+                    <a href="tel:1800111101" class="spx-top-link spx-icon-link">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        1800-11-1101
+                    </a>
+                    <div class="spx-top-link spx-lang-selector">
+                        English
+                        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-font-btn">A-</button>
+                    <button class="spx-font-btn">A</button>
+                    <button class="spx-font-btn">A+</button>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN BRANDING HEADER -->
+        <header class="spx-main-header">
+            <div class="spx-header-container">
+                <div class="spx-logo-block" onclick="window.location.href='/'">
+                    <span class="spx-text">SPX BANK</span>
+                    <span class="net-banking-tag">NET-BANKING</span>
+                </div>
+
+                <!-- NAVIGATION MENU (logged-in state) -->
+                <nav class="spx-main-nav">
+                    <div class="spx-nav-menu logged-in-menu">
+                        <a href="#" class="spx-nav-item active" onclick="triggerQuickAction('Overview')">Overview</a>
+                        <a href="/home/landingPage/manageRelationship/transactionAccounts" class="spx-nav-item">Accounts</a>
+                        <a id="nav-payments-tab" class="spx-nav-item" href="#">Payments</a>
+                        <a id="nav-deposits-tab" class="spx-nav-item" href="#">Deposits</a>
+                        <a id="nav-loans-tab" class="spx-nav-item" href="#">Loans</a>
+                        <a id="nav-cards-tab" class="spx-nav-item" href="#">Cards</a>
+                        <a id="nav-investments-tab" class="spx-nav-item" href="#">Investments</a>
+                        <a id="nav-insurance-tab" class="spx-nav-item" href="#">Insurance</a>
+                        <a id="nav-services-tab" class="spx-nav-item" href="#">Services</a>
+                        {% include 'components/services_mega_menu.html' %}
+                    </div>
+                </nav>
+
+                {% include 'components/mega_menu.html' %}
+                {% include 'components/deposits_mega_menu.html' %}
+                {% include 'components/loans_mega_menu.html' %}
+                {% include 'components/cards_mega_menu.html' %}
+                {% include 'components/investments_mega_menu.html' %}
+                {% include 'components/insurance_mega_menu.html' %}
+                {% include 'components/search_modal.html' %}
+                {% include 'components/notification_modal.html' %}
+
+                <div class="spx-header-actions">
+                    <button class="spx-header-icon-btn" id="search-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                    <button class="spx-header-icon-btn" id="notification-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </button>
+                    <a href="/home/landingPage/profilePage/services/manageProfile/personalDetails" class="spx-user-badge" id="nav-profile-badge" style="text-decoration: none;">
+                        <span class="spx-avatar-initials" id="dash-avatar">{{ user_initials }}</span>
+                        <span class="spx-user-profile-label">My Profile</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+        <!-- PORTAL MAIN CONTENT -->
+        <main class="spx-portal-body" style="background: #f8fafc;">
+            <div id="dashboard-view" style="max-width: 1440px; margin: 0 auto; padding: 28px 32px 60px; box-sizing: border-box;">
+
+                <!-- ── GREETING BAR ── -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+                    <div>
+                        <h2 style="margin: 0 0 3px; font-size: 20px; font-weight: 700; color: #0f172a;">Welcome back, <span id="dash-user-name">{{ user.name }}</span></h2>
+                        <span style="font-size: 12px; color: #94a3b8; font-weight: 500;">Primary Account &nbsp;·&nbsp; SPX Net-Banking</span>
+                    </div>
+                    <span style="font-size: 12px; color: #94a3b8;" id="last-login-time">Last Login · —</span>
+                </div>
+
+                <!-- ── MAIN 65/35 GRID ── -->
+                <div style="display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start;">
+
+                    <!-- ══════════════════════════════════════ LEFT COLUMN (65%) ══════════════════════════════════════ -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+                        <!-- PRIMARY PURPLE ACCOUNT CARD — preserved exactly -->
+                        <div style="background: linear-gradient(145deg, #5b21b6 0%, #7c3aed 60%, #6d28d9 100%); border-radius: 20px; padding: 28px 32px; color: white; box-shadow: 0 12px 32px -6px rgba(91,33,182,0.35); display: flex; flex-direction: column; justify-content: space-between; min-height: 190px; position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.05);"></div>
+                            <div style="position: absolute; bottom: -50px; left: -30px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,0.04);"></div>
+
+                            <div style="position: relative; z-index: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                                    <span style="font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.72;">Transaction Accounts</span>
+                                    <button id="balance-eye-icon" onclick="toggleBalanceVisibility()" title="Show/Hide Balance" style="background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.22); border-radius: 8px; padding: 6px 8px; cursor: pointer; display: flex; align-items: center; color: white;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                                    </button>
+                                </div>
+                                <div>
+                                    <span style="font-size: 11px; opacity: 0.68; display: block; margin-bottom: 4px;">Combined Balance</span>
+                                    <h2 class="spx-ov-balance" style="margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.5px;">₹<span id="dash-balance" data-hidden="true" data-actual-balance="{{ balance if balance else '0.00' }}">XXXX.XX</span> INR</h2>
+                                </div>
+                            </div>
+
+                            <div style="position: relative; z-index: 1; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 14px; display: flex; justify-content: space-between; align-items: flex-end;">
+                                <div>
+                                    <span style="font-size: 10px; opacity: 0.6; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; display: block; margin-bottom: 3px;">Account No.</span>
+                                    <span id="dash-acc-num" style="font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 600; letter-spacing: 2px;">{{ account_number if account_number else "—" }}</span>
+                                    <span id="dash-acc-type" style="display: block; font-size: 10px; opacity: 0.55; margin-top: 2px;">Savings Account</span>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <a href="/home/landingPage/manageRelationship/transactionAccounts" style="background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.22); color: white; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;">Accounts</a>
+                                    <button onclick="window.location.href='/home/landingPage/manageRelationship/transactionAccounts'" style="background: white; border: none; color: #5b21b6; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;">Statement</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QUICK ACTIONS ROW — 4 clean corporate tiles -->
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <span style="font-size: 13px; font-weight: 700; color: #0f172a;">Quick Actions</span>
+                                <span style="font-size: 11px; color: #94a3b8;">Tap to proceed →</span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+
+                                <!-- Send Money -->
+                                <div onclick="triggerQuickAction('Send Money')" style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 12px; text-align: center; cursor: pointer;" onmouseenter="this.style.borderColor='#a78bfa'; this.style.background='#faf5ff';" onmouseleave="this.style.borderColor='#e2e8f0'; this.style.background='';">
+                                    <div style="width: 40px; height: 40px; background: #f5f3ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#7c3aed" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                    </div>
+                                    <span style="font-size: 12px; font-weight: 600; color: #374151; display: block;">Send Money</span>
+                                    <span style="font-size: 10px; color: #94a3b8; display: block; margin-top: 2px;">Fund Transfer</span>
+                                </div>
+
+                                <!-- Pay Bills -->
+                                <div onclick="showTimeoutModal('Bill Payments coming soon.')" style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 12px; text-align: center; cursor: pointer;" onmouseenter="this.style.borderColor='#a78bfa'; this.style.background='#faf5ff';" onmouseleave="this.style.borderColor='#e2e8f0'; this.style.background='';">
+                                    <div style="width: 40px; height: 40px; background: #f0fdf4; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#16a34a" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line><circle cx="12" cy="15" r="2"></circle><path d="M12 4v3"></path></svg>
+                                    </div>
+                                    <span style="font-size: 12px; font-weight: 600; color: #374151; display: block;">Pay Bills</span>
+                                    <span style="font-size: 10px; color: #94a3b8; display: block; margin-top: 2px;">Recharge & Utilities</span>
+                                </div>
+
+                                <!-- Manage Loans -->
+                                <div onclick="window.location.href='/home/landingPage/loans/manage'" style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 12px; text-align: center; cursor: pointer;" onmouseenter="this.style.borderColor='#a78bfa'; this.style.background='#faf5ff';" onmouseleave="this.style.borderColor='#e2e8f0'; this.style.background='';">
+                                    <div style="width: 40px; height: 40px; background: #eff6ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#2563eb" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                    </div>
+                                    <span style="font-size: 12px; font-weight: 600; color: #374151; display: block;">Manage Loans</span>
+                                    <span style="font-size: 10px; color: #94a3b8; display: block; margin-top: 2px;">Track & Repay</span>
+                                </div>
+
+                                <!-- Apply Personal Loan -->
+                                <div onclick="window.location.href='/home/landingPage/loans/personal-loan/'" style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 12px; text-align: center; cursor: pointer;" onmouseenter="this.style.borderColor='#a78bfa'; this.style.background='#faf5ff';" onmouseleave="this.style.borderColor='#e2e8f0'; this.style.background='';">
+                                    <div style="width: 40px; height: 40px; background: #fff7ed; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#ea580c" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    </div>
+                                    <span style="font-size: 12px; font-weight: 600; color: #374151; display: block;">Personal Loan</span>
+                                    <span style="font-size: 10px; color: #94a3b8; display: block; margin-top: 2px;">Apply Instantly</span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- RECENT TRANSACTIONS FEED -->
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 22px 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                                <div>
+                                    <h4 style="margin: 0 0 2px; font-size: 14px; font-weight: 700; color: #0f172a;">Recent Account Activity</h4>
+                                    <span style="font-size: 11px; color: #94a3b8;">Your latest debits and credits</span>
+                                </div>
+                                <a href="/home/landingPage/manageRelationship/transactionAccounts" class="btn btn-sm btn-outline-secondary" style="border: 1px solid #e2e8f0; color: #5b21b6; padding: 5px 14px; border-radius: 8px; font-size: 11px; font-weight: 600; text-decoration: none;">View All Transactions →</a>
+                            </div>
+                            <!-- JS-populated transaction rows via loadMergedAccountData() -->
+                            <div id="transactions-table-body">
+                                <div style="display: flex; flex-direction: column; align-items: center; padding: 32px 16px; color: #94a3b8;">
+                                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#cbd5e1" stroke-width="1.5" style="margin-bottom: 10px;"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                                    <p style="margin: 0; font-size: 13px; font-weight: 500;">No recent transactions logged.</p>
+                                    <span style="font-size: 11px; margin-top: 4px; color: #cbd5e1;">Transactions will appear here once your account is active.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- ══════════════════════════════════════ END LEFT COLUMN ══════════════════════════════════════ -->
+
+
+                    <!-- ══════════════════════════════════════ RIGHT COLUMN (35%) ══════════════════════════════════════ -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+                        <!-- VIRTUAL DEBIT CARD WIDGET -->
+                        <div style="background: linear-gradient(140deg, #1e1b4b 0%, #312e81 45%, #3730a3 100%); border-radius: 20px; padding: 24px; color: white; box-shadow: 0 10px 28px rgba(49,46,129,0.32); position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: -20px; right: -20px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.05);"></div>
+                            <div style="position: absolute; bottom: -30px; left: -10px; width: 90px; height: 90px; border-radius: 50%; background: rgba(255,255,255,0.04);"></div>
+
+                            <!-- Card header -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; position: relative; z-index: 1;">
+                                <div>
+                                    <span style="font-size: 13px; font-weight: 800; letter-spacing: 0.5px; color: white;">SPX BANK</span>
+                                    <span style="display: block; font-size: 9px; color: rgba(255,255,255,0.5); margin-top: 1px; letter-spacing: 1px; text-transform: uppercase;">PLATINUM</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="background: #22c55e; width: 8px; height: 8px; border-radius: 50%; display: inline-block;"></span>
+                                    <span style="font-size: 10px; color: #86efac; font-weight: 600;">Active</span>
+                                </div>
+                            </div>
+
+                            <!-- Chip -->
+                            <div style="position: relative; z-index: 1; margin-bottom: 18px; display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 34px; height: 26px; background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+                                    <div style="width: 20px; height: 14px; border: 1px solid rgba(0,0,0,0.15); border-radius: 2px; background: linear-gradient(90deg, #f59e0b, #fde68a);"></div>
+                                </div>
+                                <!-- Contactless -->
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"><path d="M4.929 4.929a10 10 0 0 0 0 14.142"></path><path d="M7.757 7.757a6 6 0 0 0 0 8.486"></path><path d="M10.586 10.586a2 2 0 0 0 0 2.828"></path></svg>
+                            </div>
+
+                            <!-- Card Number -->
+                            <div style="position: relative; z-index: 1; margin-bottom: 18px;">
+                                <span style="font-family: 'Roboto Mono', monospace; font-size: 16px; font-weight: 700; letter-spacing: 3px; color: rgba(255,255,255,0.92);">•••• &nbsp;•••• &nbsp;•••• &nbsp;4092</span>
+                            </div>
+
+                            <!-- Cardholder & Expiry -->
+                            <div style="position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 18px;">
+                                <div>
+                                    <span style="font-size: 9px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 2px;">Card Holder</span>
+                                    <span style="font-size: 13px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 1px;">{{ user.name }}</span>
+                                </div>
+                                <div style="text-align: right;">
+                                    <span style="font-size: 9px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 2px;">Valid Thru</span>
+                                    <span style="font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.8); font-family: 'Roboto Mono', monospace;">08/29</span>
+                                </div>
+                            </div>
+
+                            <!-- Card controls -->
+                            <div style="position: relative; z-index: 1; display: flex; gap: 8px;">
+                                <button onclick="showTimeoutModal('Card management is coming soon.')" style="flex: 1; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); color: white; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer;">Freeze Card</button>
+                                <button onclick="showTimeoutModal('Card limit management is coming soon.')" style="flex: 1; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); color: white; padding: 8px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer;">Manage Limits</button>
+                            </div>
+                        </div>
+
+                        <!-- LOANS & LIABILITIES HUB -->
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                                <div style="width: 34px; height: 34px; background: #f5f3ff; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                                </div>
+                                <div>
+                                    <span style="font-size: 13px; font-weight: 700; color: #0f172a; display: block;">Loans &amp; Liabilities</span>
+                                    <span style="font-size: 11px; color: #94a3b8;">Your loan portfolio at a glance</span>
+                                </div>
+                            </div>
+
+                            <!-- No-loan state (default) — change to loan list once JS populates -->
+                            <div style="background: linear-gradient(135deg, #f5f3ff, #ede9fe); border: 1px solid #ddd6fe; border-radius: 12px; padding: 16px; margin-bottom: 12px; text-align: center;">
+                                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#7c3aed" stroke-width="1.5" style="margin: 0 auto 8px; display: block;"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                <p style="margin: 0 0 4px; font-size: 12px; font-weight: 600; color: #4c1d95;">Need Instant Funds?</p>
+                                <p style="margin: 0 0 10px; font-size: 11px; color: #7c3aed; line-height: 1.5;">Check your pre-approved Personal Loan offers</p>
+                                <button onclick="window.location.href='/home/landingPage/loans/personal-loan/'" style="background: #5b21b6; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; width: 100%;">Check Pre-Approved Offers →</button>
+                            </div>
+                            <a href="/home/landingPage/loans/manage" style="display: flex; align-items: center; justify-content: center; gap: 6px; color: #7c3aed; font-size: 12px; font-weight: 600; text-decoration: none; padding: 6px;">
+                                View All My Loans
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </a>
+                        </div>
+
+                        <!-- SUPPORT & SECURITY QUICK ASSIST -->
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+                            <span style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.9px; display: block; margin-bottom: 14px;">Support &amp; Assistance</span>
+
+                            <a href="tel:18001111101" style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; text-decoration: none;">
+                                <div style="width: 32px; height: 32px; background: #f0fdf4; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </div>
+                                <div>
+                                    <span style="font-size: 12px; font-weight: 600; color: #0f172a; display: block;">24x7 Helpline</span>
+                                    <span style="font-size: 11px; color: #94a3b8;">1800-11-1101 (Toll Free)</span>
+                                </div>
+                            </a>
+
+                            <a href="#" onclick="showTimeoutModal('Branch Locator is coming soon.')" style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; text-decoration: none;">
+                                <div style="width: 32px; height: 32px; background: #eff6ff; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#2563eb" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </div>
+                                <div>
+                                    <span style="font-size: 12px; font-weight: 600; color: #0f172a; display: block;">Branch Locator</span>
+                                    <span style="font-size: 11px; color: #94a3b8;">Find nearest SPX Bank branch</span>
+                                </div>
+                            </a>
+
+                            <a href="#" onclick="showTimeoutModal('Dispute reporting is coming soon.')" style="display: flex; align-items: center; gap: 12px; padding: 10px 0; text-decoration: none;">
+                                <div style="width: 32px; height: 32px; background: #fff7ed; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#ea580c" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                </div>
+                                <div>
+                                    <span style="font-size: 12px; font-weight: 600; color: #0f172a; display: block;">Report a Dispute</span>
+                                    <span style="font-size: 11px; color: #94a3b8;">Raise transaction complaint</span>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                    <!-- ══════════════════════════════════════ END RIGHT COLUMN ══════════════════════════════════════ -->
+
+                </div>
+            </div>
+        </main>
+
+
+        <!-- OTP VERIFICATION DRAWER -->
+        <div id="otp-modal-overlay" class="otp-drawer-overlay hidden">
+            <div class="otp-drawer">
+                <div class="otp-drawer-header">
+                    <button class="otp-close-btn" onclick="closeOtpModal()" title="Close OTP Verification">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                <div class="otp-drawer-content">
+                    <p class="otp-delivery-notice">
+                        An OTP has been sent to your registered mobile number / Gmail: <br>
+                        <strong id="otp-target-display" class="spx-otp-target">user@gmail.com</strong>
+                    </p>
+                    <!-- OTP Code Inputs -->
+                    <div class="spx-otp-fields-row">
+                        <div class="otp-inputs-wrapper" id="otp-inputs">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="0" autofocus>
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="1">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="2">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="3">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="4">
+                            <input type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" class="otp-box spx-otp-box" data-index="5">
+                        </div>
+                        <button type="button" class="spx-otp-reveal-btn" onclick="showToast('OTP is hidden for security', 'info')">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                    <div class="otp-resend-container" style="margin-top: 15px; font-size: 13px;">
+                        <span class="text-muted" style="color: #cbd5e1;">Didn't receive the code? </span>
+                        <span id="resend-wrapper" class="resend-disabled" style="color: #38bdf8;">
+                            Resend OTP in <span id="countdown-display">60s</span>
+                        </span>
+                    </div>
+                    <div class="spx-otp-submit-row">
+                        <button type="button" class="spx-btn-otp-proceed" id="btn-verify-otp" onclick="submitOtpVerification()">
+                            <span class="btn-text">Proceed</span>
+                            <span class="btn-spinner hidden"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPX BANK THEMED SESSION TIMEOUT / ERROR DIALOG -->
+        <div id="timeout-modal-overlay" class="timeout-modal-overlay hidden">
+            <div class="timeout-modal">
+                <div class="timeout-modal-title">Under Development</div>
+                <div class="timeout-modal-body">
+                    <div class="timeout-caution-icon">
+                        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#dc2626" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <p class="timeout-message" id="timeout-message-text">this feature is currently under development.</p>
+                </div>
+                <div class="timeout-modal-footer">
+                    <button class="timeout-ok-btn" onclick="closeTimeoutModal()">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="spx-portal-footer">
+            <div class="spx-footer-container">
+                <div class="spx-footer-links">
+                    <a href="#about" onclick="triggerQuickAction('About Us')">About Us</a>
+                    <span class="spx-footer-divider">|</span>
+                    <a href="#terms" onclick="triggerQuickAction('Terms & Conditions')">Terms &amp; Conditions</a>
+                    <span class="spx-footer-divider">|</span>
+                    <a href="#privacy" onclick="triggerQuickAction('Privacy Policy')">Privacy Policy</a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+
+

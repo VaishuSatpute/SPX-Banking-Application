@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Money - SPX BANK</title>
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon.png">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css?v=feature-pages-1">
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+<div class="portal-wrapper">
+            <!-- SPX BANK TOP NAVIGATION STRIP -->
+        <div class="spx-top-nav">
+            <div class="spx-top-nav-container">
+                <div class="spx-top-nav-left">
+                    <span class="spx-top-tab">Banking</span>
+                </div>
+                <div class="spx-top-nav-right">
+                    <a href="#" class="spx-top-link spx-icon-link" onclick="triggerQuickAction('Get Help')">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Get Help
+                    </a>
+                    <a href="tel:1800111101" class="spx-top-link spx-icon-link">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        1800-11-1101
+                    </a>
+                    <div class="spx-top-link spx-lang-selector">
+                        English
+                        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-font-btn">A-</button>
+                    <button class="spx-font-btn">A</button>
+                    <button class="spx-font-btn">A+</button>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN BRANDING HEADER -->
+        <header class="spx-main-header">
+            <div class="spx-header-container">
+                <div class="spx-logo-block" onclick="window.location.href='/'">
+                    <span class="spx-text">SPX BANK</span>
+                    <span class="net-banking-tag">NET-BANKING</span>
+                </div>
+
+                <!-- NAVIGATION MENU (logged-in state) -->
+                <nav class="spx-main-nav">
+                    <div class="spx-nav-menu logged-in-menu">
+                        <a href="/home/landingPage/homePage" class="spx-nav-item">Overview</a>
+                        <a href="/home/landingPage/manageRelationship/transactionAccounts" class="spx-nav-item">Accounts</a>
+                        <a id="nav-payments-tab" class="spx-nav-item" href="#">Payments</a>
+                        <a id="nav-deposits-tab" class="spx-nav-item" href="#">Deposits</a>
+                        <a id="nav-loans-tab" class="spx-nav-item" href="#">Loans</a>
+                        <a id="nav-cards-tab" class="spx-nav-item" href="#">Cards</a>
+                        <a id="nav-investments-tab" class="spx-nav-item" href="#">Investments</a>
+                        <a id="nav-insurance-tab" class="spx-nav-item" href="#">Insurance</a>
+                        <a id="nav-services-tab" class="spx-nav-item" href="#">Services</a>
+                        
+                    </div>
+                </nav>
+
+                
+                
+                
+                
+                
+                
+                
+                
+
+                <div class="spx-header-actions">
+                    <button class="spx-header-icon-btn" id="search-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                    <button class="spx-header-icon-btn" id="notification-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </button>
+                    <a href="/home/landingPage/profilePage/services/manageProfile/personalDetails" class="spx-user-badge" id="nav-profile-badge" style="text-decoration: none;">
+                        <span class="spx-avatar-initials" id="dash-avatar">SPX</span>
+                        <span class="spx-user-profile-label">My Profile</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+
+    <div class="yono-sm-page-container">
+        <a href="/home/landingPage/manageRelationship/transactionAccounts" class="yono-sm-back-link">&lt; Back to Accounts</a>
+        <h2 class="yono-sm-header">Send Money</h2>
+        <div class="yono-sm-stepper">
+            <div id="send-step-1" class="yono-sm-step active"><div class="yono-sm-step-circle">1</div><div class="yono-sm-step-label">Enter Details</div></div>
+            <div class="yono-sm-step-line"></div>
+            <div id="send-step-2" class="yono-sm-step"><div class="yono-sm-step-circle">2</div><div class="yono-sm-step-label">Review</div></div>
+            <div class="yono-sm-step-line"></div>
+            <div id="send-step-3" class="yono-sm-step"><div class="yono-sm-step-circle">3</div><div class="yono-sm-step-label">Receipt</div></div>
+        </div>
+
+        <div id="send-entry-view" class="yono-sm-content-grid">
+            <div class="yono-sm-form-container">
+                <h3 class="yono-sm-section-title">Beneficiary Details</h3>
+                <div class="yono-sm-form-row">
+                    <div class="yono-sm-form-group"><label>Account Number</label><input id="send-account" type="text" inputmode="numeric" maxlength="12" pattern="\d{12}" placeholder="Enter 12-digit Account Number"></div>
+                    <div class="yono-sm-form-group"><label>Confirm Account Number</label><input id="send-account-confirm" type="text" inputmode="numeric" maxlength="12" pattern="\d{12}" placeholder="Re-enter 12-digit Account Number"></div>
+                </div>
+                <div class="yono-sm-form-row">
+                    <div class="yono-sm-form-group" style="flex:1"><label>Account Name</label><div class="yono-sm-input-with-btn"><input id="send-recipient-name" type="text" readonly placeholder="Name will appear after verification"><button type="button" id="send-verify-btn" class="yono-sm-verify-btn" onclick="verifySendBeneficiary()">Verify</button></div><div id="send-recipient-verified" class="yono-recipient-verified">✓ Recipient verified</div></div>
+                </div>
+                <div class="yono-sm-form-row">
+                    <div class="yono-sm-form-group" style="max-width:50%"><label>Amount (₹)</label><input id="send-amount" type="number" min="1000" step="0.01" placeholder="Minimum ₹1,000" onwheel="this.blur()"></div>
+                </div>
+                <div class="yono-sm-form-row"><div class="yono-sm-form-group"><label>Note (Optional)</label><input id="send-note" type="text" maxlength="255" placeholder="Reason / note for this transfer"></div></div>
+                <div id="send-error" class="send-money-error"></div>
+            </div>
+            <div class="yono-sm-side-container">
+                <div><h3 class="yono-sm-section-title">Choose account to pay with</h3><div class="yono-sm-account-card"><div class="yono-sm-acc-number">—</div><div class="yono-sm-acc-type">Savings Account</div><div class="yono-sm-acc-balance">Available Balance: ₹—</div></div></div>
+                <div class="yono-sm-actions"><button type="button" class="yono-sm-btn-cancel" onclick="window.location.href='/home/landingPage/manageRelationship/transactionAccounts'">Cancel</button><button type="button" id="send-proceed-btn" class="yono-sm-btn-proceed" onclick="prepareTransferReview()">Proceed</button></div>
+            </div>
+        </div>
+
+        <div id="send-review-view" class="yono-review-panel">
+            <div class="receipt-box">
+                <h3>Review Transfer</h3>
+                <p>Please confirm the details before processing the transfer.</p>
+                <div class="receipt-grid">
+                    <span>From Account</span><strong id="review-from-account">—</strong>
+                    <span>Recipient</span><strong id="review-recipient">-</strong>
+                    <span>Recipient Account</span><strong id="review-recipient-account">-</strong>
+                    <span>Amount</span><strong id="review-amount">₹0.00</strong>
+                    <span>Note</span><strong id="review-note">-</strong>
+                </div>
+                <div class="yono-sm-actions" style="margin-top:25px"><button type="button" class="yono-sm-btn-cancel" onclick="backToTransferEdit()">Back & Edit</button><button type="button" class="yono-sm-btn-proceed" onclick="processTransfer()">Send Money</button></div>
+            </div>
+        </div>
+
+        <div id="send-receipt-view" class="yono-review-panel">
+            <div class="receipt-box">
+                <h3>Transfer Successful</h3><p>Your e-receipt is ready.</p>
+                <div class="receipt-grid">
+                    <span>Reference ID</span><strong id="receipt-reference">-</strong>
+                    <span>Date & Time</span><strong id="receipt-date">-</strong>
+                    <span>Sent To</span><strong id="receipt-recipient">-</strong>
+                    <span>Amount</span><strong id="receipt-amount">-</strong>
+                    <span>Remaining Balance</span><strong id="receipt-balance">-</strong>
+                    <span>Status</span><strong>COMPLETED</strong>
+                </div>
+                <div class="yono-sm-actions" style="margin-top:25px"><button type="button" class="yono-sm-btn-cancel" onclick="window.location.href='/home/landingPage/manageRelationship/transactionAccounts'">Back to Accounts</button><button type="button" class="yono-sm-btn-proceed" onclick="window.print()">Print E-Receipt</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/app.js?v=feature-pages-1"></script>
+</body>
+</html>
+
+
+

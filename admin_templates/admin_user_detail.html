@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK — Account Control Detail</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        
+        <!-- SIDEBAR -->
+        {% include 'admin_sidebar.html' %}
+
+        <!-- MAIN CONTAINER -->
+        <main class="admin-main">
+            
+            <header class="admin-topbar">
+                <div class="admin-topbar-title-group">
+                    <a href="/admin/users" style="color: #ffffff; text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; background: rgba(255,255,255,0.15); padding: 4px 10px; border-radius: 6px;">
+                        ← Back to Users
+                    </a>
+                    <h1 class="admin-page-title" style="margin-left: 10px;">User Account Control</h1>
+                </div>
+
+                <div class="admin-topbar-actions">
+                    <button onclick="handleAdminLogout()" class="admin-logout-btn">Logout</button>
+                </div>
+            </header>
+
+            <div class="admin-content">
+                
+                <!-- USER SUMMARY HEADER CARD -->
+                <div class="admin-card-table" style="padding: 24px; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <h2 style="font-size: 22px; font-weight: 800;" id="user-detail-name">Customer Name</h2>
+                                <span id="user-detail-status-badge" class="status-badge active">ACTIVE</span>
+                            </div>
+                            
+                            <div style="font-size: 13px; color: var(--admin-text-muted); display: flex; gap: 16px; flex-wrap: wrap;">
+                                <span>Email: <strong id="user-detail-email" style="color: var(--admin-text-main);">user@gmail.com</strong></span>
+                                <span>Username: <strong id="user-detail-username" style="color: var(--admin-text-main);">user123</strong></span>
+                                <span>Account: <strong id="user-detail-acc-num" style="font-family: var(--font-mono); color: var(--admin-text-main);">884901000000</strong></span>
+                            </div>
+                        </div>
+
+                        <div style="text-align: right;">
+                            <div style="font-size: 11px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase;">Simulated Balance</div>
+                            <div style="font-size: 28px; font-weight: 800; color: #15803d;" id="user-detail-balance">₹0.00</div>
+                        </div>
+                    </div>
+
+                    <!-- CONTROL ACTIONS BAR -->
+                    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--admin-border); display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="changeUserAccountStatus('ACTIVE')" class="btn-action-small btn-action-success">Set Active</button>
+                        <button onclick="changeUserAccountStatus('SUSPENDED')" class="btn-action-small btn-action-danger">Suspend User</button>
+                        <button onclick="changeUserAccountStatus('LOCKED')" class="btn-action-small btn-action-danger">Lock Account</button>
+                        <button onclick="changeUserAccountStatus('ACTIVE')" class="btn-action-small btn-action-primary">Unlock & Reset Locks</button>
+                        <button onclick="openFundModal()" class="btn-action-small btn-action-primary" style="margin-left: auto;">
+                            💳 Adjust Bank Funds
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CUSTOMER IDENTITY / PROFILE INFORMATION -->
+                <div class="admin-card-table" style="padding: 24px; margin-bottom: 24px;">
+                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">Customer Identification & Additional Profile</h3>
+                    <div id="admin-additional-info" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;font-size:12px;color:var(--admin-text-muted);">
+                        <div><strong>MID Number</strong><br><span id="admin-user-mid">—</span></div>
+                        <div><strong>Last Login</strong><br><span id="admin-user-last-login">—</span></div>
+                        <div><strong>Date of Birth</strong><br><span id="admin-user-dob">—</span></div>
+                        <div><strong>Mobile</strong><br><span id="admin-user-mobile">—</span></div>
+                        <div><strong>PAN</strong><br><span id="admin-user-pan">—</span></div>
+                        <div><strong>Father's Name</strong><br><span id="admin-user-father">—</span></div>
+                        <div><strong>Alternate Email</strong><br><span id="admin-user-alt-email">—</span></div>
+                        <div><strong>Marital Status</strong><br><span id="admin-user-marital">—</span></div>
+                        <div><strong>Religion</strong><br><span id="admin-user-religion">—</span></div>
+                        <div><strong>Category</strong><br><span id="admin-user-category">—</span></div>
+                        <div style="grid-column:span 3"><strong>Communication Address</strong><br><span id="admin-user-comm-address">—</span></div>
+                        <div style="grid-column:span 3"><strong>Permanent Address</strong><br><span id="admin-user-perm-address">—</span></div>
+                    </div>
+                </div>
+
+                <!-- 2 COLUMN GRID FOR PRIVILEGES AND TRANSACTIONS -->
+                <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px;">
+                    
+                    <!-- PRIVILEGES PANEL -->
+                    <div class="admin-card-table" style="padding: 24px;">
+                        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">User Banking Privileges</h3>
+                        
+                        <div class="switch-row">
+                            <div>
+                                <div class="switch-label-title">Online Banking Access</div>
+                                <div class="switch-label-sub">Allow net banking portal access</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="priv-online-banking" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="switch-row">
+                            <div>
+                                <div class="switch-label-title">Fund Transfer Permission</div>
+                                <div class="switch-label-sub">Allow outgoing transfers</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="priv-fund-transfer" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="switch-row">
+                            <div>
+                                <div class="switch-label-title">Card Access</div>
+                                <div class="switch-label-sub">Debit & Credit card issuance</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="priv-card-access" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="switch-row">
+                            <div>
+                                <div class="switch-label-title">Loan Application</div>
+                                <div class="switch-label-sub">Allow submitting loan requests</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="priv-loan-app" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="switch-row">
+                            <div>
+                                <div class="switch-label-title">High-Value Transfer</div>
+                                <div class="switch-label-sub">Transfers over ₹5,00,000</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="priv-high-value">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <button onclick="saveUserPrivileges()" class="btn-action-small btn-action-primary" style="width: 100%; justify-content: center; padding: 10px;">
+                                Save Banking Privileges
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- USER RECENT TRANSACTIONS -->
+                    <div class="admin-card-table">
+                        <div class="table-header-toolbar">
+                            <div class="table-title">Recent Transactions</div>
+                        </div>
+
+                        <div class="admin-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Ref ID</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Balance</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="user-detail-tx-body">
+                                    <tr><td colspan="5" style="text-align:center; padding: 20px; color: var(--admin-text-muted);">Loading transactions...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- FUND ADJUSTMENT MODAL -->
+    <div id="fund-adjustment-modal" class="admin-modal-overlay hidden">
+        <div class="admin-modal-box">
+            <div class="admin-modal-header">
+                <div class="admin-modal-title">Admin Fund Adjustment</div>
+                <button onclick="closeFundModal()" class="admin-modal-close">×</button>
+            </div>
+
+            <form onsubmit="submitFundAdjustment(event)">
+                <div class="admin-modal-body">
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; margin-bottom: 6px;">Adjustment Type</label>
+                        <select id="fund-adj-type" class="admin-select-filter" style="width: 100%;">
+                            <option value="CREDIT">CREDIT (Add Funds to User Balance)</option>
+                            <option value="DEBIT">DEBIT (Deduct Funds from User Balance)</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; margin-bottom: 6px;">Amount (₹)</label>
+                        <input type="number" step="0.01" id="fund-adj-amount" required placeholder="10000.00" class="admin-search-input" style="width: 100%;">
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--admin-text-muted); text-transform: uppercase; margin-bottom: 6px;">Audit Reason</label>
+                        <textarea id="fund-adj-reason" required placeholder="State administrative reason for audit record..." class="admin-search-input" style="width: 100%; height: 80px; font-family: var(--font-spx);"></textarea>
+                    </div>
+                </div>
+
+                <div class="admin-modal-footer">
+                    <button type="button" onclick="closeFundModal()" class="btn-action-small">Cancel</button>
+                    <button type="submit" class="btn-action-small btn-action-primary">Process Adjustment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>
+
+

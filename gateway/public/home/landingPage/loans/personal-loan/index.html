@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK - Personal Loan</title>
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css?v=original-loans-1">
+    <style>
+        .personal-loan-wrapper {
+            max-width: 1280px; 
+            margin: 0 auto; 
+            padding: 0 24px; 
+            min-height: calc(100vh - 120px); 
+            display: flex; 
+            align-items: center;
+        }
+
+        .personal-loan-grid {
+            display: grid; 
+            grid-template-columns: 1fr 1.2fr; 
+            gap: 32px; 
+            width: 100%;
+            margin-top: 24px;
+        }
+        
+        .hero-action-card {
+            background: white; 
+            border-radius: 16px; 
+            padding: 36px; 
+            border: 1px solid #e2e8f0; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+        }
+
+        .hero-badge {
+            background: #f3e8ff; 
+            color: #5a287d; 
+            font-weight: 600; 
+            font-size: 12px; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            width: fit-content;
+        }
+        
+        .hero-action-card h1 {
+            font-size: 32px; 
+            font-weight: 700; 
+            color: #1e293b; 
+            margin: 16px 0 10px;
+        }
+        
+        .hero-action-card p {
+            color: #64748b; 
+            font-size: 15px; 
+            line-height: 1.6; 
+            margin-bottom: 24px;
+        }
+        
+        .btn-primary {
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            padding: 14px 28px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            border-radius: 10px; 
+            text-decoration: none;
+            background-color: #5a287d;
+            color: white;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(90, 40, 125, 0.2);
+            width: fit-content;
+        }
+
+        .btn-primary:hover {
+            background-color: #461f62;
+            transform: translateY(-1px);
+        }
+        
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .metrics-bar {
+            display: flex;
+            gap: 16px;
+        }
+
+        .metric-card {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border-left: 4px solid #5a287d;
+        }
+
+        .metric-card h3 {
+            color: #64748b;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        
+        .metric-card p {
+            color: #0f172a;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .features-grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .feature-card-compact {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .feature-icon-sm {
+            background-color: #f1f5f9;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a287d;
+            flex-shrink: 0;
+        }
+
+        .feature-card-compact h3 {
+            color: #0f172a;
+            font-size: 14px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .feature-card-compact p {
+            color: #64748b;
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .eligibility-strip-compact {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .eligibility-item-compact {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .eligibility-item-compact svg {
+            color: #10b981;
+        }
+
+        .spx-loan-breadcrumb {
+            margin-bottom: 16px;
+            position: absolute;
+            top: 24px;
+            left: 24px;
+        }
+
+        @media (max-width: 992px) {
+            .personal-loan-grid {
+                grid-template-columns: 1fr;
+            }
+            .personal-loan-wrapper {
+                min-height: auto;
+                padding-top: 60px;
+                padding-bottom: 60px;
+                display: block;
+            }
+            .spx-loan-breadcrumb {
+                position: relative;
+                top: 0;
+                left: 0;
+            }
+        }
+        @media (max-width: 600px) {
+            .metrics-bar {
+                flex-direction: column;
+            }
+            .features-grid-2x2 {
+                grid-template-columns: 1fr;
+            }
+            .eligibility-strip-compact {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+<div class="portal-wrapper">
+            <!-- SPX BANK TOP NAVIGATION STRIP -->
+        <div class="spx-top-nav">
+            <div class="spx-top-nav-container">
+                <div class="spx-top-nav-left">
+                    <span class="spx-top-tab">Banking</span>
+                </div>
+                <div class="spx-top-nav-right">
+                    <a href="#" class="spx-top-link spx-icon-link" onclick="triggerQuickAction('Get Help')">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Get Help
+                    </a>
+                    <a href="tel:1800111101" class="spx-top-link spx-icon-link">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        1800-11-1101
+                    </a>
+                    <div class="spx-top-link spx-lang-selector">
+                        English
+                        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-font-btn">A-</button>
+                    <button class="spx-font-btn">A</button>
+                    <button class="spx-font-btn">A+</button>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN BRANDING HEADER -->
+        <header class="spx-main-header">
+            <div class="spx-header-container">
+                <div class="spx-logo-block" onclick="window.location.href='/'">
+                    <span class="spx-text">SPX BANK</span>
+                    <span class="net-banking-tag">NET-BANKING</span>
+                </div>
+
+                <!-- NAVIGATION MENU (logged-in state) -->
+                <nav class="spx-main-nav">
+                    <div class="spx-nav-menu logged-in-menu">
+                        <a href="/home/landingPage/homePage" class="spx-nav-item">Overview</a>
+                        <a href="/home/landingPage/manageRelationship/transactionAccounts" class="spx-nav-item">Accounts</a>
+                        <a id="nav-payments-tab" class="spx-nav-item" href="#">Payments</a>
+                        <a id="nav-deposits-tab" class="spx-nav-item" href="#">Deposits</a>
+                        <a id="nav-loans-tab" class="spx-nav-item" href="#">Loans</a>
+                        <a id="nav-cards-tab" class="spx-nav-item" href="#">Cards</a>
+                        <a id="nav-investments-tab" class="spx-nav-item" href="#">Investments</a>
+                        <a id="nav-insurance-tab" class="spx-nav-item" href="#">Insurance</a>
+                        <a id="nav-services-tab" class="spx-nav-item" href="#">Services</a>
+                        <div id="services-mega-menu" class="spx-services-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Quick Services -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Services</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Account Related')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><polygon points="12 2 2 7 22 7"></polygon><polyline points="2 17 2 22 22 22 22 17"></polyline><line x1="6" y1="17" x2="6" y2="7"></line><line x1="10" y1="17" x2="10" y2="7"></line><line x1="14" y1="17" x2="14" y2="7"></line><line x1="18" y1="17" x2="18" y2="7"></line></svg>
+                    <span>Account Related</span>
+                </li>
+                <li onclick="triggerQuickAction('Pension Related')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                    <span>Pension Related</span>
+                </li>
+                <li onclick="triggerQuickAction('Tax Related')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Tax Related</span>
+                </li>
+                <li onclick="triggerQuickAction('Cheque Services')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Cheque Services</span>
+                </li>
+                <li onclick="triggerQuickAction('Doorstep Banking')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Doorstep Banking</span>
+                </li>
+                <li onclick="triggerQuickAction('Positive Pay System')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Positive Pay System</span>
+                </li>
+                <li onclick="triggerQuickAction('Apply/Manage FASTag')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><circle cx="7" cy="7" r="1.5"></circle></svg>
+                    <span>Apply/Manage FASTag</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Nominee')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Manage Nominee</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage My Profile')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Manage My Profile</span>
+                </li>
+                <li onclick="triggerQuickAction('e-Secure Lock')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>e-Secure Lock</span>
+                </li>
+                <li onclick="triggerQuickAction('Stop Cheque')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Stop Cheque</span>
+                </li>
+                <li onclick="triggerQuickAction('Update My Security')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Update My Security</span>
+                </li>
+                <li onclick="triggerQuickAction('Report Unauthorized Transactions')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span>Report- Unauthorized Transactions</span>
+                </li>
+                <li onclick="triggerQuickAction('Security Question')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Security Question</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                    </div>
+                </nav>
+
+                <div id="mega-menu-overlay" class="spx-mega-overlay"></div>
+<div id="payments-mega-menu" class="spx-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Fund Transfer</h5>
+            <ul class="spx-mega-list">
+                <a href="/home/landingPage/profilePage/send-money/fund-transfer" style="text-decoration: none; color: inherit; display: contents;">
+                    <li>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        <span>Send Money</span>
+                    </li>
+                </a>
+                <li onclick="triggerQuickAction('Bill Payments')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+                    <span>Bill Payments</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <a href="/home/landingPage/manageRelationship/transactionAccounts" style="text-decoration: none; color: inherit; display: contents;">
+                    <li>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <span>Transaction History</span>
+                    </li>
+                </a>
+                <li onclick="triggerQuickAction('Manage Limits')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Manage Limits</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="deposits-mega-menu" class="spx-deposits-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Fixed Deposit')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    <span>Fixed Deposit</span>
+                </li>
+                <li onclick="triggerQuickAction('Recurring Deposit')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    <span>Recurring Deposit</span>
+                </li>
+                <li onclick="triggerQuickAction('Annuity Deposit')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <span>Annuity Deposit</span>
+                </li>
+                <li onclick="triggerQuickAction('Auto Sweep')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path><path d="M12 8l4 4-4 4"></path></svg>
+                    <span>Auto Sweep</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Deposits')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>Manage Deposits</span>
+                </li>
+                <li onclick="triggerQuickAction('View Interest Rate')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+                    <span>View Interest Rate</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage PPF Accounts')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                    <span>Manage PPF Accounts</span>
+                </li>
+                <li onclick="triggerQuickAction('Deposit Requests')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>Requests</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="loans-mega-menu" class="spx-loans-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Products -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Personal Loan')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Personal Loan</span>
+                </li>
+
+                <li style="cursor: default; opacity: 0.65; pointer-events: none; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span>Home Loan</span>
+                    </div>
+                    <span class="badge bg-light text-muted" style="font-size: 10px;">Soon</span>
+                </li>
+
+                <li style="cursor: default; opacity: 0.65; pointer-events: none; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                        <span>Education Loan</span>
+                    </div>
+                    <span class="badge bg-light text-muted" style="font-size: 10px;">Soon</span>
+                </li>
+                
+                <li style="cursor: default; opacity: 0.65; pointer-events: none; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>
+                        <span>Gold Loan</span>
+                    </div>
+                    <span class="badge bg-light text-muted" style="font-size: 10px;">Soon</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+
+                <li onclick="triggerQuickAction('Manage Loans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    <span>Manage Loans</span>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="cards-mega-menu" class="spx-cards-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Products -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Credit Cards')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Credit Cards</span>
+                </li>
+                <li onclick="triggerQuickAction('Debit Cards')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    <span>Debit Cards</span>
+                </li>
+
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Credit Card')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Manage Credit Card</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage Debit Card')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    <span>Manage Debit Card</span>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="investments-mega-menu" class="spx-investments-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- LEFT COLUMN: Products -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Products</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Mutual Funds')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M7 20h10"></path><path d="M10 20c5.5-5.5.5-16 .5-16"></path><path d="M10.5 4.5c2.5 2.5 2.5 7 0 9.5"></path></svg>
+                    <span>Mutual Funds</span>
+                </li>
+                <li onclick="triggerQuickAction('NPS')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 12A10 10 0 0 0 2 12h20Z"></path><path d="M12 12v8a2 2 0 0 0 4 0"></path></svg>
+                    <span>NPS</span>
+                </li>
+                <li onclick="triggerQuickAction('PPF')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M8 21h8a4 4 0 0 0 4-4v-3a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v3a4 4 0 0 0 4 4z"></path><circle cx="12" cy="15" r="2"></circle><path d="M10 10s1.5-4 2-4 2 4 2 4"></path></svg>
+                    <span>PPF</span>
+                </li>
+                <li onclick="triggerQuickAction('IPO')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>IPO</span>
+                </li>
+                <li onclick="triggerQuickAction('Demat & Securities')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    <span>Demat & Securities</span>
+                </li>
+            </ul>
+        </div>
+        <!-- RIGHT COLUMN: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Mutual Fund')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M7 20h10"></path><path d="M10 20c5.5-5.5.5-16 .5-16"></path><path d="M10.5 4.5c2.5 2.5 2.5 7 0 9.5"></path></svg>
+                    <span>Manage Mutual Fund</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage NPS Account')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 12A10 10 0 0 0 2 12h20Z"></path><path d="M12 12v8a2 2 0 0 0 4 0"></path></svg>
+                    <span>Manage NPS Account</span>
+                </li>
+                <li onclick="triggerQuickAction('Manage PPF')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M8 21h8a4 4 0 0 0 4-4v-3a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v3a4 4 0 0 0 4 4z"></path><circle cx="12" cy="15" r="2"></circle><path d="M10 10s1.5-4 2-4 2 4 2 4"></path></svg>
+                    <span>Manage PPF</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="insurance-mega-menu" class="spx-insurance-mega-menu">
+    <div class="spx-mega-menu-inner">
+        <!-- COLUMN 1: Life Insurance -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Life Insurance</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Protection Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Protection Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Child Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><circle cx="12" cy="8" r="5"></circle><path d="M18 20c0-3.3-4-6-6-6s-6 2.7-6 6"></path></svg>
+                    <span>Child Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Retirement Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M22 12A10 10 0 0 0 2 12h20Z"></path><path d="M12 12v8a2 2 0 0 0 4 0"></path></svg>
+                    <span>Retirement Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Wealth Creation')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <span>Wealth Creation</span>
+                </li>
+                <li onclick="triggerQuickAction('Savings Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"></path></svg>
+                    <span>Savings Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Group Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Group Plans</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- COLUMN 2: General Insurance -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">General Insurance</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Health Plans')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path></svg>
+                    <span>Health Plans</span>
+                </li>
+                <li onclick="triggerQuickAction('Motor Insurance')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><path d="M9 17h6"></path><circle cx="17" cy="17" r="2"></circle></svg>
+                    <span>Motor Insurance</span>
+                </li>
+                <li onclick="triggerQuickAction('Travel Insurance')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="6" y="8" width="12" height="14" rx="2" ry="2"></rect><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M10 12h4"></path><path d="M10 16h4"></path></svg>
+                    <span>Travel Insurance</span>
+                </li>
+                <li onclick="triggerQuickAction('Accident Insurance')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span>Accident Insurance</span>
+                </li>
+                <li onclick="triggerQuickAction('Group Plans (General)')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Group Plans</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- COLUMN 3: Quick Links -->
+        <div class="spx-mega-col">
+            <h5 class="spx-mega-heading">Quick Links</h5>
+            <ul class="spx-mega-list">
+                <li onclick="triggerQuickAction('Manage Policies')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Manage Policies</span>
+                </li>
+                <li onclick="triggerQuickAction('Resume Application')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                    <span>Resume Application</span>
+                </li>
+                <li onclick="triggerQuickAction('Tools & Calculators')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="mega-icon"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="10" y2="10"></line><line x1="14" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="10" y2="14"></line><line x1="14" y1="14" x2="16" y2="14"></line><line x1="8" y1="18" x2="10" y2="18"></line><line x1="14" y1="18" x2="16" y2="18"></line></svg>
+                    <span>Tools & Calculators</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                <div id="spx-search-dropdown" class="spx-search-modal">
+  <!-- Global Search Input -->
+  <div class="search-input-wrapper">
+    <span class="search-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    </span>
+    <input type="text" id="global-search-input" class="search-input-field" placeholder="Search by Products, Services, Payees" autocomplete="off" />
+  </div>
+
+  <!-- Recommended Section -->
+  <div class="search-recommended-box">
+    <h6 class="recommended-title">Recommended</h6>
+    <div class="recommended-items-grid">
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+        </div>
+        <span>Credit Cards</span>
+      </a>
+
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <span>Insurance</span>
+      </a>
+
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path><path d="M12 6v6l4 2"></path></svg>
+        </div>
+        <span>Loan Repayment</span>
+      </a>
+
+      <a href="#" class="rec-item">
+        <div class="rec-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7e57c2" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+        </div>
+        <span>Mutual Funds</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+                <!-- Notification Dropdown Modal -->
+<div id="spx-notification-dropdown" class="spx-notification-modal d-none">
+    <div class="notification-empty-state">
+        <div class="notification-graphic">
+            <svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                <!-- Dotted orbit -->
+                <circle cx="75" cy="75" r="50" fill="none" stroke="#d1c4e9" stroke-width="1.5" stroke-dasharray="4 4" />
+                <!-- Small purple gradient circle -->
+                <circle cx="45" cy="45" r="12" fill="url(#grad1)" />
+                <!-- Large purple circle with subtle patterns -->
+                <circle cx="85" cy="85" r="35" fill="url(#grad2)" />
+                <path d="M75 75 Q 85 65 95 75 Q 85 85 75 75" fill="#ffffff" opacity="0.2"/>
+                <!-- Definitions for gradients -->
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#b39ddb" />
+                        <stop offset="100%" stop-color="#7e57c2" />
+                    </linearGradient>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#d1c4e9" />
+                        <stop offset="100%" stop-color="#b39ddb" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <h4 class="notification-title">All caught up!</h4>
+        <p class="notification-subtitle">There are no new notifications</p>
+    </div>
+</div>
+
+
+
+                <div class="spx-header-actions">
+                    <button class="spx-header-icon-btn" id="search-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                    <button class="spx-header-icon-btn" id="notification-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </button>
+                    <a href="/home/landingPage/profilePage/services/manageProfile/personalDetails" class="spx-user-badge" id="nav-profile-badge" style="text-decoration: none;">
+                        <span class="spx-avatar-initials" id="dash-avatar"></span>
+                        <span class="spx-user-profile-label">My Profile</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+
+    <main class="spx-portal-body" style="position: relative;">
+      <div class="personal-loan-wrapper">
+          
+        <div class="spx-loan-breadcrumb" style="font-size: 14px; font-weight: 500; display: flex; align-items: center;">
+            <a href="/home/landingPage/homePage" title="Back to Overview" style="color: #64748b; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#5a287d'" onmouseout="this.style.color='#64748b'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </a>
+            <span style="color: #cbd5e1; margin: 0 10px;">/</span>
+            <span style="color: #5a287d; font-weight: 600;">Personal Loan</span>
+        </div>
+
+        <div class="personal-loan-grid">
+            <!-- LEFT COLUMN (Hero Action Card) -->
+            <div class="hero-action-card">
+                <span class="hero-badge">INSTANT & PAPERLESS</span>
+                <h1>Personal Loan</h1>
+                <p>Fulfill your urgent financial needs with quick approval and funds disbursed directly to your account.</p>
+                <a href="/home/landingPage/loans/personal-loan/apply/" class="btn-primary">Apply for Personal Loan &rarr;</a>
+            </div>
+
+            <!-- RIGHT COLUMN (Metrics & Feature Cards) -->
+            <div class="right-column">
+                <div class="metrics-bar">
+                    <div class="metric-card">
+                        <h3>Interest Rate</h3>
+                        <p>From 10.99% p.a.</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Flexible Tenure</h3>
+                        <p>12 to 60 Months</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Process</h3>
+                        <p>100% Digital</p>
+                    </div>
+                </div>
+
+                <div class="features-grid-2x2">
+                    <div class="feature-card-compact">
+                        <div class="feature-icon-sm">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <div>
+                            <h3>No Collateral Required</h3>
+                            <p>Get a loan unsecured. No need to pledge assets.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card-compact">
+                        <div class="feature-icon-sm">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <div>
+                            <h3>Instant Eligibility Check</h3>
+                            <p>Find exactly how much you can borrow instantly.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card-compact">
+                        <div class="feature-icon-sm">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        </div>
+                        <div>
+                            <h3>Quick Disbursal</h3>
+                            <p>Funds transferred to your account post approval.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card-compact">
+                        <div class="feature-icon-sm">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        </div>
+                        <div>
+                            <h3>Zero Hidden Charges</h3>
+                            <p>Complete clarity on fees and prepayments.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="eligibility-strip-compact">
+                    <div class="eligibility-item-compact">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Age 21-58</span>
+                    </div>
+                    <div class="eligibility-item-compact">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Min Net ₹25,000/mo</span>
+                    </div>
+                    <div class="eligibility-item-compact">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Salaried / Self-Employed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </main>
+</div>
+<script src="/app.js?v=original-loans-1"></script>
+</body>
+</html>
+
+
+

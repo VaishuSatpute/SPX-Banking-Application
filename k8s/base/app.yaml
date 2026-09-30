@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spx-app
+  namespace: spx-banking
+spec:
+  selector:
+    app.kubernetes.io/name: spx-app
+  ports:
+    - name: http
+      port: 5000
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spx-app
+  namespace: spx-banking
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: spx-app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: spx-app
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+      initContainers:
+        - name: wait-for-mysql
+          image: mysql:8.4
+          env:
+            - name: MYSQL_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: spx-secrets
+                  key: mysql-password
+          command: ["sh", "-c", "until mysqladmin ping -h spx-mysql -u spxapp --silent; do echo waiting for MySQL; sleep 3; done"]
+      containers:
+        - name: app
+          image: SPX_APP_IMAGE
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 5000
+          env:
+            - name: DB_HOST
+              value: spx-mysql
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              value: spxbank
+            - name: DB_USER
+              value: spxapp
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: spx-secrets
+                  key: mysql-password
+            - name: SMTP_SERVER
+              value: smtp.hostinger.com
+            - name: SMTP_PORT
+              value: "465"
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: spx-secrets
+                  key: smtp-user
+            - name: SMTP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: spx-secrets
+                  key: smtp-password
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: spx-secrets
+                  key: secret-key
+            - name: ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: spx-secrets
+                  key: admin-email
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spx-secrets
+                  key: admin-password
+            - name: ADMIN_NAME
+              value: Bank Administrator
+          readinessProbe:
+            httpGet: {path: /healthz, port: http}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests: {cpu: 250m, memory: 256Mi}
+            limits: {cpu: "1", memory: 512Mi}
+

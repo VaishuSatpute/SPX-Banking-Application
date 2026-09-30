@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK — Master Control Center Login</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/favicon/favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body style="background: linear-gradient(135deg, #1f072c 0%, #3c1253 100%); display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0;">
+
+    <div style="width: 100%; max-width: 440px; padding: 20px;">
+        <div style="background: #ffffff; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);">
+            
+            <!-- Header Banner -->
+            <div style="background: #3c1253; padding: 32px 28px; text-align: center; color: #ffffff; border-bottom: 3px solid #f26f21;">
+                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #f26f21, #6d1c7f); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 24px; color: #ffffff; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(242, 111, 33, 0.4);">
+                    SPX
+                </div>
+                <h2 style="font-size: 20px; font-weight: 800; letter-spacing: 0.5px; margin: 0 0 4px 0;">SPX BANK</h2>
+                <div style="font-size: 11px; font-weight: 700; color: #f26f21; text-transform: uppercase; letter-spacing: 1.5px;">Master Control Center</div>
+            </div>
+
+            <!-- Form Body -->
+            <div style="padding: 32px 28px;">
+                <div id="admin-login-error" style="display: none; background-color: #fee2e2; border: 1px solid #fca5a5; color: #b91c1c; padding: 12px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; font-weight: 600;">
+                    Invalid administrator credentials
+                </div>
+
+                <form onsubmit="handleAdminLoginSubmit(event)">
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Administrator Email / User</label>
+                        <input type="text" id="admin-email" value="" required placeholder="admin@spxbank.com" style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#6d1c7f'" onblur="this.style.borderColor='#cbd5e1'">
+                    </div>
+
+                    <div style="margin-bottom: 24px;">
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Root Master Password</label>
+                        <input type="password" id="admin-password" value="" required placeholder="••••••••••••" style="width: 100%; padding: 12px 16px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#6d1c7f'" onblur="this.style.borderColor='#cbd5e1'">
+                    </div>
+
+                    <button type="submit" id="btn-admin-login" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #6d1c7f, #3c1253); color: #ffffff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; box-shadow: 0 4px 15px rgba(109, 28, 127, 0.4);" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform='none'">
+                        AUTHENTICATE & ENTER CONTROL CENTER
+                    </button>
+                </form>
+
+                <div style="margin-top: 24px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+                    🔒 Restricted Access — Unauthorized access is monitored and logged under Bank Security Regulations.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>
+

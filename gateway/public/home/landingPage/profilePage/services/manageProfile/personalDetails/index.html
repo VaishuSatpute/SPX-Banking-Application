@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPX BANK - My Profile</title>
+    <link rel="icon" type="image/png" href="/assets/favicon/favicon.png">
+    <link rel="stylesheet" href="/styles.css?v=feature-pages-1">
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+<div class="portal-wrapper">
+            <!-- SPX BANK TOP NAVIGATION STRIP -->
+        <div class="spx-top-nav">
+            <div class="spx-top-nav-container">
+                <div class="spx-top-nav-left">
+                    <span class="spx-top-tab">Banking</span>
+                </div>
+                <div class="spx-top-nav-right">
+                    <a href="#" class="spx-top-link spx-icon-link" onclick="triggerQuickAction('Get Help')">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        Get Help
+                    </a>
+                    <a href="tel:1800111101" class="spx-top-link spx-icon-link">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        1800-11-1101
+                    </a>
+                    <div class="spx-top-link spx-lang-selector">
+                        English
+                        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-font-btn">A-</button>
+                    <button class="spx-font-btn">A</button>
+                    <button class="spx-font-btn">A+</button>
+                    <span class="spx-top-divider">|</span>
+                    <button class="spx-logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN BRANDING HEADER -->
+        <header class="spx-main-header">
+            <div class="spx-header-container">
+                <div class="spx-logo-block" onclick="window.location.href='/'">
+                    <span class="spx-text">SPX BANK</span>
+                    <span class="net-banking-tag">NET-BANKING</span>
+                </div>
+
+                <!-- NAVIGATION MENU (logged-in state) -->
+                <nav class="spx-main-nav">
+                    <div class="spx-nav-menu logged-in-menu">
+                        <a href="/home/landingPage/homePage" class="spx-nav-item">Overview</a>
+                        <a href="/home/landingPage/manageRelationship/transactionAccounts" class="spx-nav-item">Accounts</a>
+                        <a id="nav-payments-tab" class="spx-nav-item" href="#">Payments</a>
+                        <a id="nav-deposits-tab" class="spx-nav-item" href="#">Deposits</a>
+                        <a id="nav-loans-tab" class="spx-nav-item" href="#">Loans</a>
+                        <a id="nav-cards-tab" class="spx-nav-item" href="#">Cards</a>
+                        <a id="nav-investments-tab" class="spx-nav-item" href="#">Investments</a>
+                        <a id="nav-insurance-tab" class="spx-nav-item" href="#">Insurance</a>
+                        <a id="nav-services-tab" class="spx-nav-item" href="#">Services</a>
+                        
+                    </div>
+                </nav>
+
+                
+                
+                
+                
+                
+                
+                
+                
+
+                <div class="spx-header-actions">
+                    <button class="spx-header-icon-btn" id="search-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                    <button class="spx-header-icon-btn" id="notification-trigger-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </button>
+                    <a href="/home/landingPage/profilePage/services/manageProfile/personalDetails" class="spx-user-badge" id="nav-profile-badge" style="text-decoration: none;">
+                        <span class="spx-avatar-initials" id="dash-avatar">SPX</span>
+                        <span class="spx-user-profile-label">My Profile</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+
+    <main class="spx-portal-body">
+        <div class="profile-page-container">
+            <div class="profile-breadcrumb">Home &nbsp;&gt;&nbsp; My Profile &nbsp;&gt;&nbsp; Personal Details</div>
+            <div class="profile-page-header">
+                <div>
+                    <h1>My Profile</h1>
+                    <p>Manage your personal information and account identification details.</p>
+                </div>
+                <div class="profile-mid-card">
+                    <span>Member Identification No.</span>
+                    <strong id="profile-mid-number">—</strong>
+                </div>
+            </div>
+
+            <div class="profile-layout-grid">
+                <aside class="profile-sidebar">
+                    <div class="profile-avatar-large">SPX</div>
+                    <h2>—</h2>
+                    <p class="profile-username">@—</p>
+                    <div class="profile-sidebar-stat"><span>Account No.</span><strong>—</strong></div>
+                    <div class="profile-sidebar-stat"><span>Last Login</span><strong id="profile-last-login">—</strong></div>
+                    <div class="profile-sidebar-stat"><span>Status</span><strong class="profile-status-active">—</strong></div>
+                </aside>
+
+                <section class="profile-content-card">
+                    <div class="profile-content-tabs">
+                        <div class="profile-tab active">Personal Details <span class="tab-indicator-badge">!</span></div>
+                        <div class="profile-completion">Profile Completion: <strong id="profile-completion">0%</strong></div>
+                    </div>
+
+                    <div class="profile-kyc-banner">
+                        <div class="kyc-left">Complete your profile to keep your customer information up to date.</div>
+                        <div class="kyc-right"><span id="profile-save-status">Not saved yet</span></div>
+                    </div>
+
+                    <form id="profile-form" class="profile-form-section">
+                        <div class="profile-section-heading">Personal & KYC Information</div>
+                        <div class="profile-form-row">
+                            <div class="form-group"><label class="profile-floating-label">Date of Birth</label><input id="profile-dob" name="date_of_birth" type="date" class="profile-input"></div>
+                            <div class="form-group"><label class="profile-floating-label">Mobile Number</label><input id="profile-mobile" name="mobile_number" type="tel" maxlength="15" class="profile-input" placeholder="Enter mobile number"></div>
+                        </div>
+                        <div class="profile-form-row">
+                            <div class="form-group"><label class="profile-floating-label">PAN</label><input id="profile-pan" name="pan" maxlength="10" class="profile-input" placeholder="ABCDE1234F"></div>
+                            <div class="form-group"><label class="profile-floating-label">Father's Name</label><input id="profile-father" name="father_name" class="profile-input" placeholder="Enter father's name"></div>
+                        </div>
+                        <div class="form-group full-width"><label class="profile-floating-label">Alternate Email ID</label><input id="profile-alt-email" name="alternate_email" type="email" class="profile-input" placeholder="Enter alternate email address"></div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="profile-floating-label">Communication Address</label><textarea id="profile-comm-address" name="communication_address" class="profile-input profile-textarea" placeholder="Enter communication address"></textarea></div>
+                            <div class="form-group"><label class="profile-floating-label">Permanent Address</label><textarea id="profile-perm-address" name="permanent_address" class="profile-input profile-textarea" placeholder="Enter permanent address"></textarea></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group dropdown"><label class="profile-floating-label">Marital Status</label><select id="profile-marital" name="marital_status" class="profile-select"><option value="">Select</option><option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option><option>Separated</option></select></div>
+                            <div class="form-group dropdown"><label class="profile-floating-label">Religion</label><select id="profile-religion" name="religion" class="profile-select"><option value="">Select</option><option>Hindu</option><option>Muslim</option><option>Christian</option><option>Sikh</option><option>Buddhist</option><option>Jain</option><option>Parsi</option><option>Jewish</option><option>Other</option><option>Prefer not to say</option></select></div>
+                        </div>
+                        <div class="form-row half-row">
+                            <div class="form-group dropdown"><label class="profile-floating-label">Category</label><select id="profile-category" name="category" class="profile-select"><option value="">Select</option><option>General</option><option>OBC</option><option>SC</option><option>ST</option><option>EWS</option><option>Other</option><option>Prefer not to say</option></select></div>
+                        </div>
+                        <div class="profile-action-bar" style="position:static; margin-top:28px; padding:0; border:0;">
+                            <button type="button" id="profile-save-btn" class="profile-save-btn" onclick="saveCustomerProfile()">Save Changes</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
+</div>
+<script src="/app.js?v=feature-pages-1"></script>
+</body>
+</html>
+
+
+

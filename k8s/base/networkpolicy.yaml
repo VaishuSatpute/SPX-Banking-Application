@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: feature-api-only-from-gateway, namespace: spx-banking}
+spec:
+  podSelector: {matchExpressions: [{key: spx.feature, operator: Exists}]}
+  policyTypes: [Ingress]
+  ingress:
+    - from: [{podSelector: {matchLabels: {app.kubernetes.io/name: spx-gateway}}}]
+      ports: [{protocol: TCP, port: 5000}]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: mysql-only-from-features, namespace: spx-banking}
+spec:
+  podSelector: {matchLabels: {app.kubernetes.io/name: spx-mysql}}
+  policyTypes: [Ingress]
+  ingress:
+    - from: [{podSelector: {matchExpressions: [{key: spx.feature, operator: Exists}]}}]
+      ports: [{protocol: TCP, port: 3306}]
+
+
